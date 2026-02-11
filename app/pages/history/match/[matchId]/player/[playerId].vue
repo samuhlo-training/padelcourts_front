@@ -22,40 +22,60 @@ useHead({
 })
 
 // =============================================================================
-// █ DATA: MOCK
+// █ DATA: FETCHING
 // =============================================================================
-const playerData = ref({
-  id: Number(playerId.value),
-  name: 'Agustin Tapia',
-  teamName: 'Team A',
-  country: 'ES',
-  totalPoints: 80,
-  totalErrors: 40,
-  strokes: [
-    { name: 'Drive', winners: 20, errors: 10 },
-    { name: 'Reves', winners: 30, errors: 12 },
-    { name: 'Remate', winners: 22, errors: 33 },
-    { name: 'Bandeja', winners: 12, errors: 25 },
-    { name: 'Volea', winners: 23, errors: 11 },
-    { name: 'Volea reves', winners: 23, errors: 5 },
-    { name: 'Globo', winners: 45, errors: 2 },
-    { name: 'Dejada', winners: 34, errors: 13 },
-    { name: 'Contrapared', winners: 23, errors: 44 },
-    { name: 'Bajada de pared', winners: 12, errors: 22 },
-  ]
+const { currentMatch, loading: pending, error, loadMatch, getPlayerFromMatch } = useHistoryMatchData()
+
+onMounted(async () => {
+  // If fetching match detail failed or empty in previous page, we might need to load it here
+  if (!currentMatch.value || String(currentMatch.value.id) !== String(matchId.value)) {
+    await loadMatch(matchId.value)
+  }
 })
 
-const items = ref([
- { id: 1, stroke: 'Drive', timestamp: "01'", isWinner: true },
- { id: 2, stroke: 'Smash', timestamp: "03'", isWinner: true },
- { id: 3, stroke: 'Smash', timestamp: "05'", isWinner: false },
- { id: 4, stroke: 'Drive', timestamp: "01'", isWinner: true },
- { id: 5, stroke: 'Smash', timestamp: "03'", isWinner: true },
- { id: 6, stroke: 'Smash', timestamp: "05'", isWinner: false },
- { id: 7, stroke: 'Smash', timestamp: "05'", isWinner: false },
- { id: 8, stroke: 'Smash', timestamp: "05'", isWinner: false },
- { id: 9, stroke: 'Drive', timestamp: "01'", isWinner: true }, 
-])
+const playerData = computed(() => {
+  const p = getPlayerFromMatch(playerId.value)
+  if (!p) return null
+  
+  // Map stats object to strokes array for PlayerStatsCard
+  const strokeMapping = [
+    { name: 'Winners', winners: p.stats?.winners || 0, errors: 0 },
+    { name: 'Smash', winners: p.stats?.smashWinners || 0, errors: 0 },
+    { name: 'Volea', winners: p.stats?.volleyWinners || 0, errors: 0 },
+    { name: 'Derecha', winners: p.stats?.forehandWinners || 0, errors: 0 },
+    { name: 'Revés', winners: p.stats?.backhandWinners || 0, errors: 0 },
+    { name: 'Errores No Forzados', winners: 0, errors: p.stats?.unforcedErrors || 0 },
+    { name: 'Red', winners: 0, errors: p.stats?.netErrors || 0 },
+    { name: 'Fondo', winners: 0, errors: p.stats?.baselineErrors || 0 },
+  ]
+
+  return {
+    id: p.id,
+    name: p.name,
+    teamName: p.teamName,
+    country: 'ES',
+    totalPoints: p.points,
+    totalErrors: p.errors,
+    strokes: strokeMapping
+  }
+})
+
+// Map pointHistory to PointHistoryList format
+const items = computed(() => {
+  if (!currentMatch.value?.pointHistory) return []
+  
+  const pId = Number(playerId.value)
+  
+  // Only show points where this player was the protagonist (won the point or made the error)
+  return currentMatch.value.pointHistory
+    .filter(pt => pt.winnerId === pId || pt.opponentErrorId === pId)
+    .map(pt => ({
+      id: pt.id,
+      stroke: pt.stroke || (pt.winnerId === pId ? 'Ganador' : 'Error'),
+      timestamp: pt.timestamp, // Assuming backend provides a "time elapsed" string or similar
+      isWinner: pt.winnerId === pId
+    }))
+})
 
 const matchIdStr = matchId
 
@@ -74,9 +94,21 @@ const matchIdStr = matchId
       ]"
     />
 
+    <!-- LOADING -->
+    <div v-if="pending" class="flex-1 flex flex-col items-center justify-center opacity-50">
+      <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-brand-lime"></div>
+    </div>
+
+    <!-- ERROR or NOT FOUND -->
+    <div v-else-if="error || !playerData" class="flex-1 flex flex-col items-center justify-center text-red-400">
+      <p>Error al cargar datos del jugador</p>
+      <p v-if="error" class="text-xs opacity-60">{{ error }}</p>
+      <p v-else class="text-xs opacity-60">Jugador no encontrado en este partido</p>
+    </div>
+
     <!-- MAIN GRID -->
     <!-- 3 Cols total. Left 2, Right 1. -->
-    <CommonLayoutBentoGrid :cols="3" :rows="1">
+    <CommonLayoutBentoGrid v-else :cols="3" :rows="1">
       
       <!-- LEFT: STATS BREAKDOWN -->
       <CommonLayoutBentoItem :cols="2" :rows="1" variant="raw">
@@ -87,7 +119,10 @@ const matchIdStr = matchId
 
       <!-- RIGHT: POINT HISTORY -->
       <CommonLayoutBentoItem :cols="1" :rows="1" variant="raw">
-        <PointHistoryList :points="items" />
+        <div v-if="items.length === 0" class="h-full flex items-center justify-center bg-white rounded-2xl p-6 text-gray-400 text-sm text-center">
+          Detalle de puntos no disponible en el historial
+        </div>
+        <PointHistoryList v-else :points="items" />
       </CommonLayoutBentoItem>
 
     </CommonLayoutBentoGrid>

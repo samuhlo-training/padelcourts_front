@@ -32,6 +32,7 @@ interface Court {
   name: string;
   status: "occupied" | "free";
   activeMatchId?: number | null;
+  lastMatchId?: number | null;
   currentMatch?: CourtMatch;
   lastMatch?: CourtLastMatch;
 }
@@ -193,4 +194,81 @@ interface WebSocketMessage<T = any> {
 interface ServerMessage {
   type: string;
   payload: any;
+}
+// =============================================================================
+// █ HISTORY DOMAIN
+// =============================================================================
+
+export interface HistoryMatchSummary {
+  id: number;
+  type: string;
+  status: string;
+  date: string;
+  time: string;
+  duration: string;
+  court: string;
+  winner_side: "pair_a" | "pair_b";
+  score: string;
+  team_a: {
+    name: string;
+    sets_won: number;
+  };
+  team_b: {
+    name: string;
+    sets_won: number;
+  };
+}
+
+export interface HistoryPlayerDetailedStats {
+  winners: number;
+  smashWinners: number;
+  volleyWinners: number;
+  forehandWinners: number;
+  backhandWinners: number;
+  unforcedErrors: number;
+  netErrors: number;
+  baselineErrors: number;
+}
+
+export interface HistoryPlayerStats {
+  id: number;
+  name: string;
+  points: number;
+  errors: number;
+  isMvp: boolean;
+  stats?: HistoryPlayerDetailedStats;
+}
+
+export interface HistoryPoint {
+  id: number;
+  set: number;
+  game: number;
+  score: string;
+  winnerId: number;
+  type: "winner" | "error";
+  opponentErrorId?: number;
+  stroke?: string;
+  timestamp: string;
+}
+
+export interface HistoryMatchDetail {
+  id: number;
+  type: string;
+  date: string;
+  timeStart: string;
+  timeEnd: string;
+  duration: string;
+  court: string;
+  scoreA: number;
+  scoreB: number;
+  sets: Array<{ set: number; a: number; b: number }>;
+  teamA: {
+    name: string;
+    players: HistoryPlayerStats[];
+  };
+  teamB: {
+    name: string;
+    players: HistoryPlayerStats[];
+  };
+  pointHistory?: HistoryPoint[];
 }

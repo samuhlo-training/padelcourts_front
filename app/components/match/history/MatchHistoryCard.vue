@@ -18,7 +18,8 @@ defineProps<{
     time: string
     court: string
     type: string
-    duration: string
+    duration: string,
+    status: string,
     teamA: {
       name: string
       players: string[]
@@ -45,6 +46,7 @@ defineProps<{
       <span class="text-brand-lime font-black text-xl">#{{ String(match.id).padStart(2, '0') }}</span>
       <span class="text-xs font-bold uppercase tracking-wider text-gray-400">{{ match.type }}</span>
     </div>
+    <span :class="match.status === 'canceled' ? 'text-red-300' : 'text-brand-lime'" class="text-xs font-bold uppercase tracking-wider">{{ match.status }}</span>
 
     <!-- CENTER: TEAMS & SCORE -->
     <div class="flex-1 flex flex-col md:flex-row items-center justify-between w-full gap-4">

@@ -11,11 +11,20 @@ import { useCourtsStore } from "~/stores/courts.store";
 import type { Court } from "~/types";
 
 export const useCourtData = () => {
+  // ===========================================================================
+  // █ INIT
+  // ===========================================================================
   const store = useCourtsStore();
-  // const { $fetch } = useNuxtApp(); // Removed: $fetch is globally available
+
+  // ===========================================================================
+  // █ METHODS
+  // ===========================================================================
 
   /**
-   * Fetch initial courts data from API
+   * ◼️ FETCH COURTS (INITIAL LOAD)
+   * ---------------------------------------------------------
+   * REST Fetch to populate initial state.
+   * Maps backend data to frontend Court interface.
    */
   const fetchCourts = async () => {
     store.loading = true;
@@ -24,26 +33,27 @@ export const useCourtData = () => {
     try {
       console.log("[useCourtData] Fetching courts from /api/courts...");
 
-      // Use explicit $fetch with full proxy path
+      // FETCH -> Explicit request to avoid hook ambiguity
       const data = await $fetch<any[]>("/api/courts");
 
       console.log("[useCourtData] Raw Data:", data);
 
       if (data) {
-        // Map raw API response to Court interface
+        // MAP -> Backend DTO to Frontend Entity
         const mappedCourts: Court[] = data.map((c: any) => ({
           id: c.id,
           name: c.name,
           status: c.status === "busy" ? "occupied" : "free",
           activeMatchId: c.activeMatchId,
-          // We construct initial match state if active
+          lastMatchId: c.lastMatchId,
+          // CONSTRUCT -> Initial match state if active
           currentMatch: c.activeMatchId
             ? {
                 id: c.activeMatchId,
                 type: "Partido",
-                elapsedTime: "00:00:00", // Will be updated by WS or timer
+                elapsedTime: "00:00:00", // UPDATED BY WS/TIMER
                 isLive: true,
-                startTime: c.startTime, // Provided by backend
+                startTime: c.startTime,
                 pairAName: c.pairAName,
                 pairBName: c.pairBName,
               }
@@ -52,7 +62,7 @@ export const useCourtData = () => {
             c.status === "free" ? { type: "Partido amistoso" } : undefined,
         }));
 
-        // Commit to store
+        // COMMIT -> Update Store
         store.setCourts(mappedCourts);
       }
     } catch (err: any) {
@@ -64,7 +74,11 @@ export const useCourtData = () => {
   };
 
   /**
-   * Initialize full court system (fetch + ws)
+   * ◼️ INIT SYSTEM
+   * ---------------------------------------------------------
+   * Bootstraps the court system:
+   * 1. Fetches initial REST data
+   * 2. Establishes Websocket connection
    */
   const init = async () => {
     await fetchCourts();

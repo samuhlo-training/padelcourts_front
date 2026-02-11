@@ -9,16 +9,32 @@
  * =====================================================================
  */
 
+const strokeNames = {
+  "forehand": 'Drive',
+  "backhand": 'Revés',
+  "smash": 'Remate',
+  "bandeja": 'Bandeja',
+  "vibora": 'Víbora',
+  "volley_forehand": 'Volea de derecha',
+  "volley_backhand": 'Volea de revés',
+  "lob": 'Globo',
+  "drop_shot": 'Dejada',
+  "wall_boast": 'Wall Boast'
+} as const
+
+type StrokeType = keyof typeof strokeNames
+
 interface PointHistoryItem {
   id: number
-  stroke: string // 'Drive', 'Smash', etc.
-  timestamp: string // "01'", "03'", etc.
-  isWinner: boolean // true = Green, false = Red underline/style
+  stroke: StrokeType
+  timestamp: string
+  isWinner: boolean
 }
 
 defineProps<{
   points: PointHistoryItem[]
 }>()
+
 
 </script>
 
@@ -42,7 +58,7 @@ defineProps<{
               : 'bg-white text-brand-dark border-b-2 border-brand-red border-t border-l border-r border-gray-100' // 'Red underline' look
           ]"
         >
-          <span class="font-bold text-sm">{{ point.stroke }}</span>
+          <span class="font-bold text-sm">{{ strokeNames[point.stroke] }}</span>
           <span class="font-mono text-xs opacity-70">{{ point.timestamp }}</span>
         </div>
         

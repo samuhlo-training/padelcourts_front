@@ -86,9 +86,11 @@ const formattedElapsedTime = computed(() => {
       {{ court.name}}
     </span>
     <span class="flex-1" />
-    <button class="flex flex-row items-center gap-1.5 text-sm text-gray-600 hover:text-brand-dark transition-colors duration-150">
-      Ver ultimo partido
-      <PhArrowRight :size="12" weight="bold" />
-    </button>
+    <NuxtLink :to="`/history/match/${court.lastMatchId}`">
+      <button class="flex flex-row items-center gap-1.5 text-sm text-gray-600 hover:text-brand-lime hover:font-bold transition-all duration-150">
+        Ver ultimo partido
+        <PhArrowRight :size="12" weight="bold" />
+      </button>
+    </NuxtLink>
   </div>
 </template>

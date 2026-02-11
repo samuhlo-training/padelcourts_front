@@ -1,75 +1,43 @@
-# Nuxt Minimal Starter
+# 🎾 Padel Counters (Frontend)
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Client-side application for the Padel Counters system. Built with **Vue 3**, **Nuxt 3**, and **Tailwind CSS**.
 
-## Setup
+---
 
-Make sure to install dependencies:
+## 📚 Documentation
+- [**Backend Architecture & API**](docs/backend/CURRENT_STATE_DOCS.md) - Detailed system overview.
+- [**Project Status & Roadmap**](docs/PROJECT_STATUS.md) - Current features and future plans.
+
+---
+
+## 🛠️ Tech Stack
+- **Framework:** [Nuxt 3](https://nuxt.com/) (Vue 3 + TypeScript)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **State Management:** [Pinia](https://pinia.vuejs.org/)
+- **Icons:** [Phosphor Icons](https://phosphoricons.com/)
+- **Runtime:** [Bun](https://bun.sh/)
+
+---
+
+## 🚀 Setup
+
+Make sure you have **Bun** installed.
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
+# Install dependencies
 bun install
-```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
+# Start development server
 bun run dev
 ```
 
-## Production
+Visit `http://localhost:3000` to see the app.
 
-Build the application for production:
+---
 
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## 🏗️ Project Structure
+- `app/pages`: Application routes.
+- `app/components`: Reusable UI components.
+- `app/stores`: Pinia state management.
+- `app/composables`: Shared logic (hooks).
+- `docs/`: Project documentation.

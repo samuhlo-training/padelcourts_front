@@ -21,18 +21,15 @@ useHead({
 })
 
 // =============================================================================
-// █ DATA: MOCK COURTS
-// =============================================================================
-// =============================================================================
-// █ DATA: STORE
+// █ DATA: STORE & INIT
 // =============================================================================
 const courtsStore = useCourtsStore()
 const { courts } = storeToRefs(courtsStore)
 
-// Initialize data via composable
+// INIT -> Fetch data via composable
 const { init } = useCourtData()
 
-// Initialize store/data on mount
+// MOUNT -> Initialize store
 onMounted(() => {
   init()
 })
@@ -81,12 +78,14 @@ const freeCourts = computed(() => courts.value.filter(c => c.status === 'free'))
     <!-- █ FREE COURTS -->
     <!-- --------------------------------------------------------------------- -->
     <CommonLayoutBentoItem title="PISTAS LIBRES" :cols="2" :rows="2">
-      <div class="space-y-3">
-        <CourtsCourtStatusCard
-          v-for="court in freeCourts"
-          :key="court.id"
-          :court="court"
-        />
+      <div class="flex flex-col gap-3">
+       
+          <CourtsCourtStatusCard 
+            v-for="court in freeCourts"
+            :key="court.id"
+            :court="court"
+          />
+       
 
         <!-- EMPTY STATE -->
         <p v-if="freeCourts.length === 0" class="text-sm text-gray-400 text-center py-8">
