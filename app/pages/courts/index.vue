@@ -23,31 +23,19 @@ useHead({
 // =============================================================================
 // █ DATA: MOCK COURTS
 // =============================================================================
-const courts = ref<Court[]>([
-  {
-    id: 1,
-    name: 'PISTA 1',
-    status: 'occupied',
-    currentMatch: { type: 'Partido amistoso', elapsedTime: '00:43:45', isLive: true },
-  },
-  {
-    id: 3,
-    name: 'PISTA 3',
-    status: 'occupied',
-    currentMatch: { type: 'Partido amistoso', elapsedTime: '01:23:45', isLive: true },
-  },
-  {
-    id: 6,
-    name: 'PISTA 6',
-    status: 'occupied',
-    currentMatch: { type: 'Partido amistoso', elapsedTime: '00:22:45', isLive: true },
-  },
-  { id: 2, name: 'PISTA 2', status: 'free', lastMatch: { type: 'Partido amistoso' } },
-  { id: 4, name: 'PISTA 2', status: 'free', lastMatch: { type: 'Partido amistoso' } },
-  { id: 5, name: 'PISTA 2', status: 'free', lastMatch: { type: 'Partido amistoso' } },
-  { id: 7, name: 'PISTA 2', status: 'free', lastMatch: { type: 'Partido amistoso' } },
-  { id: 8, name: 'PISTA 2', status: 'free', lastMatch: { type: 'Partido amistoso' } },
-])
+// =============================================================================
+// █ DATA: STORE
+// =============================================================================
+const courtsStore = useCourtsStore()
+const { courts } = storeToRefs(courtsStore)
+
+// Initialize data via composable
+const { init } = useCourtData()
+
+// Initialize store/data on mount
+onMounted(() => {
+  init()
+})
 
 // =============================================================================
 // █ COMPUTED: FILTERED LISTS
@@ -61,7 +49,7 @@ const freeCourts = computed(() => courts.value.filter(c => c.status === 'free'))
   <!-- █ SECTION: PAGE TITLE -->
   <!-- ======================================================================= -->
   <div class="mb-8">
-    <h1 class="text-3xl font-black text-brand-dark tracking-tight text-center">
+    <h1 class="text-3xl font-black text-brand-dark tracking-tight ml-8">
       PISTAS
     </h1>
   </div>
@@ -69,12 +57,12 @@ const freeCourts = computed(() => courts.value.filter(c => c.status === 'free'))
   <!-- ======================================================================= -->
   <!-- █ SECTION: BENTO GRID -->
   <!-- ======================================================================= -->
-  <CommonLayoutBentoGrid class="!grid-cols-1 lg:!grid-cols-2">
+  <CommonLayoutBentoGrid :cols="4" :rows="2">
 
     <!-- --------------------------------------------------------------------- -->
     <!-- █ OCCUPIED COURTS -->
     <!-- --------------------------------------------------------------------- -->
-    <CommonLayoutBentoItem title="PISTAS OCUPADAS">
+    <CommonLayoutBentoItem title="PISTAS OCUPADAS" :cols="2" :rows="2">
       <div class="space-y-3">
         <CourtsCourtStatusCard
           v-for="court in occupiedCourts"
@@ -92,7 +80,7 @@ const freeCourts = computed(() => courts.value.filter(c => c.status === 'free'))
     <!-- --------------------------------------------------------------------- -->
     <!-- █ FREE COURTS -->
     <!-- --------------------------------------------------------------------- -->
-    <CommonLayoutBentoItem title="PISTAS LIBRES">
+    <CommonLayoutBentoItem title="PISTAS LIBRES" :cols="2" :rows="2">
       <div class="space-y-3">
         <CourtsCourtStatusCard
           v-for="court in freeCourts"

@@ -14,15 +14,67 @@ import MiniDetails from './MiniDetails.vue'
 // =============================================================================
 // █ CORE: PROPS
 // =============================================================================
-defineProps<{
+const props = defineProps<{
   player: PlayerMVPData
+  variant?: 'mvp' | 'team-a' | 'team-b'
+  to?: string | object // Optional navigation target
 }>()
+
+const variantClasses = computed(() => {
+  switch (props.variant) {
+    case 'team-a':
+      return 'bg-brand-lime text-brand-dark'
+    case 'team-b':
+      return 'bg-white border-2 border-brand-red/10 text-brand-dark'
+    default: // mvp
+      return 'bg-brand-lime text-brand-dark'
+  }
+})
 </script>
 
 <template>
-  <div class="bg-brand-lime rounded-2xl p-6 shadow-sm flex flex-col gap-3">
-    <!-- MVP BADGE -->
-    <MVPBadge />
+  <!-- LINK VARIANT -->
+  <NuxtLink
+    v-if="to"
+    :to="to"
+    class="rounded-2xl p-6 shadow-sm flex flex-col gap-3 h-full transition-all duration-200 hover:shadow-md hover:scale-[1.02] cursor-pointer"
+    :class="variantClasses"
+  >
+    <!-- MVP BADGE (Only for MVP variant) -->
+    <MVPBadge v-if="variant === 'mvp'" />
+    
+    <!-- TEAM BADGE (For team variants) -->
+    <div v-else-if="variant" class="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">
+      {{ variant === 'team-a' ? 'Team A' : 'Team B' }}
+    </div>
+
+    <!-- PLAYER NAME -->
+    <h3 class="text-2xl font-black text-brand-dark uppercase tracking-tight leading-tight">
+      {{ player.name }}
+    </h3>
+
+    <!-- STATS -->
+    <MiniDetails
+      :stats="[
+        { label: 'Puntos', value: player.points },
+        { label: 'Fallos', value: player.errors },
+      ]"
+    />
+  </NuxtLink>
+
+  <!-- DIV VARIANT -->
+  <div
+    v-else
+    class="rounded-2xl p-6 shadow-sm flex flex-col gap-3 h-full transition-all duration-200"
+    :class="variantClasses"
+  >
+    <!-- MVP BADGE (Only for MVP variant) -->
+    <MVPBadge v-if="variant === 'mvp'" />
+    
+    <!-- TEAM BADGE (For team variants) -->
+    <div v-else-if="variant" class="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">
+      {{ variant === 'team-a' ? 'Team A' : 'Team B' }}
+    </div>
 
     <!-- PLAYER NAME -->
     <h3 class="text-2xl font-black text-brand-dark uppercase tracking-tight leading-tight">

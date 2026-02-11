@@ -25,7 +25,7 @@ defineProps<{
   >
     <!-- TEAM LABEL -->
     <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-      Team {{ side }}
+      {{ team.name || `Team ${side}` }}
     </span>
 
     <!-- PLAYER NAMES -->

@@ -21,7 +21,7 @@ const navItems = [
   <!-- ======================================================================= -->
   <!-- █ SECTION: SIDEBAR -->
   <!-- ======================================================================= -->
-  <aside class="fixed left-0 top-16 bottom-0 w-52 bg-white border-r border-gray-100 flex flex-col z-30">
+  <aside class="w-52 bg-white border-r border-gray-100 flex flex-col h-full">
 
     <!-- --------------------------------------------------------------------- -->
     <!-- █ NAV LINKS -->

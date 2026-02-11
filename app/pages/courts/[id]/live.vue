@@ -4,15 +4,16 @@
  * =====================================================================
  * DESC:   Live match view for a specific court. Bento grid layout with
  *         MatchLiveCard (2 cols), LiveCommentaryCard and PlayerMiniCard.
- *         Uses mock data until backend integration.
- * STATUS: WIP
+ *         Connects to WebSocket via activeMatchStore.
+ * STATUS: INTEGRATED
  * =====================================================================
  */
-import type { LiveMatchData, CommentaryEntry, PlayerMVPData } from '~/types'
-import { PhArrowLeft } from '@phosphor-icons/vue'
+
 import MatchLiveCard from '~/components/match/live/MatchLiveCard.vue'
 import LiveCommentaryCard from '~/components/match/live/LiveCommentaryCard.vue'
 import PlayerMiniCard from '~/components/player/summary/PlayerMiniCard.vue'
+import { useActiveMatchStore } from '~/stores/activeMatch.store'
+import { storeToRefs } from 'pinia'
 
 // =============================================================================
 // █ CORE: PAGE META
@@ -29,83 +30,118 @@ useHead({
 })
 
 // =============================================================================
-// █ DATA: MOCK MATCH
+// █ DATA: STORE INTEGRATION
 // =============================================================================
-const match = ref<LiveMatchData>({
-  id: 1,
-  courtName: `PISTA ${courtId.value}`,
-  type: 'Partido amistoso',
-  elapsedMinutes: 55,
-  currentSet: 2,
-  setScoreA: 2,
-  setScoreB: 4,
-  pointsA: '40',
-  pointsB: '00',
-  setsWonA: 1,
-  setsWonB: 0,
-  teamA: { name: 'Team A', players: ['Alex Galan', 'Fede Chingoto'] },
-  teamB: { name: 'Team B', players: ['Arturo Coello', 'Agustin Tapia'] },
-  isLive: true,
+const store = useActiveMatchStore()
+const courtsStore = useCourtsStore()
+const { match, commentary, isConnected } = storeToRefs(store)
+
+/** Resolve the activeMatchId for this court from the courts store */
+const activeMatchId = computed(() => {
+  const court = courtsStore.courts.find((c) => c.id === Number(courtId.value))
+  return court?.activeMatchId ?? null
 })
 
-const commentary = ref<CommentaryEntry[]>(
-  Array.from({ length: 8 }, (_, i) => ({
-    id: i + 1,
-    text: 'Arturo hizo un smash victorioso a 120km/h !',
-    timestamp: new Date().toISOString(),
-  })),
-)
-
-const mvpPlayer = ref<PlayerMVPData>({
-  name: 'Arturo Coello',
-  points: 8,
-  errors: 3,
+onMounted(() => {
+  const matchId = activeMatchId.value
+  if (matchId) {
+    store.initLiveMatch(matchId)
+  }
 })
+
+onUnmounted(() => {
+  const matchId = activeMatchId.value
+  if (matchId) {
+    store.leaveMatch(matchId)
+  }
+})
+
+const mvpPlayer = computed(() => {
+  if (!match.value?.stats?.length) {
+    return {
+      name: 'Esperando datos...',
+      points: 0,
+      errors: 0,
+    }
+  }
+
+  // Find player with highest pointsWon
+  // We know match.value is defined and stats has at least 1 element because of the check above
+  const stats = match.value!.stats!
+  const firstPlayer = stats[0]
+  
+  if (!firstPlayer) {
+    return { name: 'N/A', points: 0, errors: 0 }
+  }
+
+  const bestPlayer = stats.reduce((prev, current) => {
+    return (current.pointsWon > prev.pointsWon) ? current : prev
+  }, firstPlayer)
+
+  return {
+    name: bestPlayer.playerName,
+    points: bestPlayer.pointsWon,
+    errors: bestPlayer.unforcedErrors,
+  }
+})
+
 </script>
 
 <template>
   <!-- ======================================================================= -->
   <!-- █ SECTION: BREADCRUMB -->
   <!-- ======================================================================= -->
-  <div class="mb-8 flex items-center gap-3">
-    <NuxtLink
-      to="/courts"
-      class="text-gray-400 hover:text-brand-dark transition-colors"
-    >
-      <PhArrowLeft :size="20" weight="bold" />
-    </NuxtLink>
-    <h1 class="text-3xl font-black text-brand-dark tracking-tight">
-      PISTAS
-      <span class="text-gray-300 mx-1">→</span>
-      <span>PISTA {{ courtId }}</span>
-    </h1>
-  </div>
+  <CommonBreadCrumbs 
+    back-to="/courts"
+    :items="[
+      { label: 'PISTAS' }, 
+      { label: `PISTA ${courtId}` }
+    ]"
+  >
+    <template #action>
+      <span v-if="match?.isLive && isConnected" class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded animate-pulse">
+        LIVE
+      </span>
+      <span v-else-if="match && !match.isLive" class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-bold rounded">
+        FINALIZADO
+      </span>
+      <span v-else class="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded">
+        OFFLINE
+      </span>
+    </template>
+  </CommonBreadCrumbs>
 
   <!-- ======================================================================= -->
   <!-- █ SECTION: BENTO GRID (3 cols) -->
   <!-- ======================================================================= -->
-  <CommonLayoutBentoGrid>
+  <CommonLayoutBentoGrid v-if="match" :cols="3" :rows="3">
 
     <!-- ------------------------------------------------------------------- -->
-    <!-- █ MATCH LIVE CARD (2 cols * 2 rows) -->
+    <!-- █ MATCH LIVE CARD (2 cols * 3 rows) -->
     <!-- ------------------------------------------------------------------- -->
-    <CommonLayoutBentoItem :cols="2" :rows="2">
+    <CommonLayoutBentoItem :cols="2" :rows="3">
       <MatchLiveCard :match="match" />
     </CommonLayoutBentoItem>
 
     <!-- ------------------------------------------------------------------- -->
-    <!-- █ LIVE COMMENTARY -->
+    <!-- █ LIVE COMMENTARY (1 col * 2 rows) -->
     <!-- ------------------------------------------------------------------- -->
-    <CommonLayoutBentoItem>
-      <LiveCommentaryCard :entries="commentary" />
+    <CommonLayoutBentoItem :rows="2">
+      <LiveCommentaryCard :entries="commentary"  />
     </CommonLayoutBentoItem>
 
     <!-- ------------------------------------------------------------------- -->
-    <!-- █ MVP PLAYER CARD -->
+    <!-- █ MVP PLAYER CARD (1 col * 1 row) -->
     <!-- ------------------------------------------------------------------- -->
-    <div class="md:col-span-1">
-      <PlayerMiniCard :player="mvpPlayer" />
-    </div>
+    <CommonLayoutBentoItem variant="raw">
+      <PlayerMiniCard :player="mvpPlayer" variant="mvp" />
+    </CommonLayoutBentoItem>
 
   </CommonLayoutBentoGrid>
+
+  <!-- LOADING STATE -->
+  <div v-else class="flex items-center justify-center p-12 text-gray-400 font-medium">
+    <div class="animate-spin mr-3 h-5 w-5 border-2 border-brand-lime border-t-transparent rounded-full"></div>
+    Conectando al partido...
+  </div>
 </template>

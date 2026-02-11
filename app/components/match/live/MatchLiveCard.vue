@@ -12,13 +12,39 @@ import SetScore from './SetScore.vue'
 import BigScore from './BigScore.vue'
 import MatchScore from './MatchScore.vue'
 import TeamInfo from './TeamInfo.vue'
+import { useNow } from '@vueuse/core'
 
 // =============================================================================
 // █ CORE: PROPS
 // =============================================================================
-defineProps<{
+const props = defineProps<{
   match: LiveMatchData
 }>()
+
+// =============================================================================
+// █ LOGIC: TIMER
+// =============================================================================
+const { now, pause, resume } = useNow({ controls: true, interval: 1000 })
+
+// Watch match status to pause/resume timer
+watch(() => props.match.isLive, (isLive) => {
+  if (isLive) resume()
+  else pause()
+}, { immediate: true })
+
+const formattedElapsedTime = computed(() => {
+  if (!props.match.startTime) return "00:00:00"
+  
+  const start = new Date(props.match.startTime).getTime()
+  const current = now.value.getTime()
+  const diff = Math.max(0, current - start)
+  
+  const hours = Math.floor(diff / 3600000)
+  const minutes = Math.floor((diff % 3600000) / 60000)
+  const seconds = Math.floor((diff % 60000) / 1000)
+  
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+})
 </script>
 
 <template>
@@ -31,7 +57,7 @@ defineProps<{
         {{ match.type }}
       </h2>
       <span class="text-sm font-bold text-gray-400 tabular-nums">
-        {{ match.elapsedMinutes }}'
+        {{ formattedElapsedTime }}
       </span>
     </div>
 

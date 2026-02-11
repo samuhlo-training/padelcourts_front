@@ -1,0 +1,170 @@
+[
+  {
+    "id": 1,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 217
+  },
+  {
+    "id": 2,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 218
+  },
+  {
+    "id": 3,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 219
+  },
+  {
+    "id": 4,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 220
+  },
+  {
+    "id": 5,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 221
+  },
+  {
+    "id": 6,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 222
+  },
+  {
+    "id": 7,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 223
+  },
+  {
+    "id": 8,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 224
+  },
+  {
+    "id": 9,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 225
+  },
+  {
+    "id": 10,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 226
+  },
+  {
+    "id": 11,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 241
+  },
+  {
+    "id": 12,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 262
+  },
+  {
+    "id": 13,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 277
+  },
+  {
+    "id": 14,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 312
+  },
+  {
+    "id": 15,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 347
+  },
+  {
+    "id": 16,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 382
+  },
+  {
+    "id": 17,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 427
+  },
+  {
+    "id": 18,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 462
+  },
+  {
+    "id": 19,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 497
+  },
+  {
+    "id": 20,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 532
+  },
+  {
+    "id": 22,
+    "name": "Test Court Status",
+    "status": "free",
+    "activeMatchId": null
+  },
+  {
+    "id": 23,
+    "name": "Test Court Status",
+    "status": "free",
+    "activeMatchId": null
+  },
+  {
+    "id": 26,
+    "name": "Test Court 1",
+    "status": "busy",
+    "activeMatchId": 557
+  },
+  {
+    "id": 27,
+    "name": "Test Court 1",
+    "status": "busy",
+    "activeMatchId": 558
+  },
+  {
+    "id": 28,
+    "name": "Test Court 1",
+    "status": "busy",
+    "activeMatchId": 559
+  },
+  {
+    "id": 29,
+    "name": "Test Court 1",
+    "status": "busy",
+    "activeMatchId": 560
+  },
+  {
+    "id": 34,
+    "name": "Test Court IoT",
+    "status": "busy",
+    "activeMatchId": 579
+  },
+  {
+    "id": 39,
+    "name": "Test Court Status",
+    "status": "free",
+    "activeMatchId": null
+  }
+]
