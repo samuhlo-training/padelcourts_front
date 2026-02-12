@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /**
- * █ [UI_ATOM] :: DATE_HISTORY
+ * █ [UI_ATOMO] :: DATE_HISTORY
  * =====================================================================
- * DESC:   Displays date and time range for a match.
- * STATUS: STABLE
+ * DESC:   Muestra la fecha y el intervalo de tiempo de un partido.
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 defineProps<{

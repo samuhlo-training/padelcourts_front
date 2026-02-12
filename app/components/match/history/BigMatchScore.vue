@@ -1,10 +1,10 @@
 <script setup lang="ts">
 /**
- * █ [UI_MOLECULE] :: BIG_MATCH_SCORE
+ * █ [UI_MOLECULA] :: BIG_MATCH_SCORE
  * =====================================================================
- * DESC:   Displays the detailed score of a past match.
- *         Composes BigSetScore and DurationTimer.
- * STATUS: STABLE
+ * DESC:   Muestra la puntuación detallada de un partido pasado.
+ *         Compone BigSetScore y DurationTimer.
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 import BigSetScore from './BigSetScore.vue'
@@ -21,14 +21,14 @@ defineProps<{
 <template>
   <div class="flex items-center gap-12 w-full max-w-4xl justify-center">
     
-    <!-- BIG SCORE -->
+    <!-- GRAN PUNTUACIÓN -->
     <div class="flex items-center gap-6">
        <span class="text-[8rem] font-black text-brand-lime leading-none">{{ scoreA }}</span>
        <span class="text-4xl font-black text-brand-dark h-4 w-12 bg-brand-dark rounded-full"></span>
        <span class="text-[8rem] font-black text-brand-dark leading-none">{{ scoreB }}</span>
     </div>
 
-    <!-- SET SCORES -->
+    <!-- PUNTUACIONES DE LOS SETS -->
     <div class="flex flex-col justify-center space-y-3 pl-12 border-l border-gray-100">
       <BigSetScore 
         v-for="set in sets" 
@@ -39,7 +39,7 @@ defineProps<{
       />
     </div>
 
-    <!-- DURATION -->
+    <!-- DURACIÓN -->
     <div class="ml-auto">
        <DurationTimer :duration="duration" />
     </div>

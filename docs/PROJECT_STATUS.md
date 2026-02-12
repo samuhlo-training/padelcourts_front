@@ -4,7 +4,7 @@
 
   # <code>PROJECT_STATUS</code>
 
-  **CURRENT_STATE_AND_ROADMAP_OVERVIEW**
+  **RESUMEN_DE_ESTADO_ACTUAL_Y_HOJA_DE_RUTA**
   <br />
 
   ![Version](https://img.shields.io/badge/VERSION-0.1.0_ALPHA-black?style=for-the-badge)
@@ -19,53 +19,53 @@
 
 ### 00 __ SNAPSHOT
 
-> **ABSTRACT:** Real-time Padel Scoring System. Frontend consumes Hono API via REST/WS. Backend manages state in PostgreSQL + Drizzle.
+> **ABSTRACT:** Sistema de puntuación de pádel en tiempo real. El frontend consume una API Hono vía REST/WS. El backend gestiona el estado en PostgreSQL + Drizzle.
 >
 > <br />
 >
-> **LATEST UPDATE:** 2026-02-11
-> *Focus: Documentation & Code Cleanup.*
+> **ÚLTIMA ACTUALIZACIÓN:** 2026-02-11
+> *Enfoque: Documentación y limpieza de código.*
 
 ---
 
-### 01 __ CURRENT STATE
+### 01 __ ESTADO ACTUAL
 
-| LAYER | COMPONENT | STATUS | NOTES |
+| CAPA | COMPONENTE | ESTADO | NOTAS |
 | :--- | :--- | :--- | :--- |
-| **Frontend** | `Padel Front` | `ACTIVE` | Nuxt 3 + Tailwind + Pinia. Real-time court grid. |
-| **Backend** | `Padel API` | `STABLE` | Bun + Hono. WS Pub/Sub operational. |
-| **Database** | `PostgreSQL` | `STABLE` | Drizzle ORM. Schema defined & seeded. |
-| **IoT** | `Telemetry` | `BETA` | Auth working. Sensor integration WIP. |
+| **Frontend** | `Padel Front` | `ACTIVO` | Nuxt 3 + Tailwind + Pinia. Cuadrícula de pistas en tiempo real. |
+| **Backend** | `Padel API` | `ESTABLE` | Bun + Hono. WS Pub/Sub operativo. |
+| **Base de Datos** | `PostgreSQL` | `ESTABLE` | Drizzle ORM. Esquema definido y poblado (seeded). |
+| **IoT** | `Telemetría` | `BETA` | Auth funcionando. Integración de sensores en progreso (WIP). |
 
 <br>
 
-### 02 __ FEATURES ROADMAP
+### 02 __ HOJA DE RUTA (ROADMAP)
 
-**[P0] AUTHENTICATION & PROFILES**
-> Implement JWT auth for players/admins. User profiles with history.
+**[P0] AUTENTICACIÓN Y PERFILES**
+> Implementar autenticación JWT para jugadores/administradores. Perfiles de usuario con historial.
 
-**[P1] TOURNAMENT ENGINE**
-> Logic for brackets, round-robin scheduling, and automatic match generation.
+**[P1] MOTOR DE TORNEOS**
+> Lógica para cuadros (brackets), programación round-robin y generación automática de partidos.
 
-**[P2] ADVANCED ANALYTICS**
-> SQL Views for aggregation. Player heatmaps (requires expanded telemetry).
+**[P2] ANALÍTICA AVANZADA**
+> Vistas SQL para agregación. Mapas de calor de jugadores (requiere telemetría ampliada).
 
-**[P3] MEDIA INTEGRATION**
-> Link recorded clips to `point_history` timestamps.
+**[P3] INTEGRACIÓN MULTIMEDIA**
+> Vincular clips grabados con marcas de tiempo en `point_history`.
 
 <br>
 
-### 03 __ REFACTORING TARGETS
+### 03 __ OBJETIVOS DE REFACTORIZACIÓN
 
-| TYPE | TARGET | ACTION |
+| TIPO | OBJETIVO | ACCIÓN |
 | :--- | :--- | :--- |
-| **Component** | `CourtStatusCard` | **SPLIT** -> `CourtHeader` + `MatchInfo` + `EmptyState` |
-| **Store** | `match.store.ts` | **DECOUPLE** -> Separate Active/Live logic from Historical data |
-| **Types** | `shared/types` | **UNIFY** -> Eliminate duplication between front/back |
+| **Componente** | `CourtStatusCard` | **DIVIDIR** -> `CourtHeader` + `MatchInfo` + `EmptyState` |
+| **Store** | `match.store.ts` | **DESACOPLAR** -> Separar lógica activa/en vivo de datos históricos |
+| **Tipos** | `shared/types` | **UNIFICAR** -> Eliminar duplicidad entre front/back |
 
 <br>
 
 <div align="center">
 <br />
-<code>MAINTAINED BY <a href='https://github.com/samuhlo'>samuhlo</a></code>
+<code>MANTENIDO POR <a href='https://github.com/samuhlo'>samuhlo</a></code>
 </div>

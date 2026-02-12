@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * █ [COMPONENT] :: POINT HISTORY LIST
+ * █ [COMPONENTE] :: POINT HISTORY LIST
  * =====================================================================
- * DESC:   Timeline of points for a player.
- *         Green = Winner, Red = Error/Lost.
+ * DESC:   Línea de tiempo de puntos para un jugador.
+ *         Verde = Ganador (Winner), Rojo = Error/Perdido.
  * PROPS:  points (PointHistoryItem[])
- * STATUS: MOCK
+ * STATUS: PROTOTIPO (MOCK)
  * =====================================================================
  */
 
@@ -19,12 +19,14 @@ const strokeNames = {
   "volley_backhand": 'Volea de revés',
   "lob": 'Globo',
   "drop_shot": 'Dejada',
-  "wall_boast": 'Wall Boast'
+  "wall_boast": 'Wall Boast',
+  "winner": 'Ganador',
+  "error": 'Error'
 } as const
 
 type StrokeType = keyof typeof strokeNames
 
-interface PointHistoryItem {
+export interface PointHistoryItem {
   id: number
   stroke: StrokeType
   timestamp: string
@@ -41,11 +43,11 @@ defineProps<{
 <template>
   <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 h-full flex flex-col">
     
-    <!-- HEADER -->
+    <!-- CABECERA -->
     <h3 class="text-xl font-bold text-brand-dark mb-6">Historial de puntos</h3>
 
-    <!-- LIST -->
-    <!-- Grid layout for badges? Or just a list? Design looks like a vertical list/flow -->
+    <!-- LISTA -->
+    <!-- ¿Diseño en cuadrícula para medallas? ¿O solo una lista? El diseño parece una lista/flujo vertical -->
     <div class="flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
       <div class="space-y-3">
         <div 
@@ -55,14 +57,14 @@ defineProps<{
           :class="[
             point.isWinner 
               ? 'bg-brand-lime text-brand-dark border border-brand-lime' 
-              : 'bg-white text-brand-dark border-b-2 border-brand-red border-t border-l border-r border-gray-100' // 'Red underline' look
+              : 'bg-white text-brand-dark border-b-2 border-brand-red border-t border-l border-r border-gray-100' // Estilo de 'subrayado rojo'
           ]"
         >
           <span class="font-bold text-sm">{{ strokeNames[point.stroke] }}</span>
           <span class="font-mono text-xs opacity-70">{{ point.timestamp }}</span>
         </div>
         
-        <!-- EMPTY STATE -->
+        <!-- ESTADO VACÍO -->
         <div v-if="points.length === 0" class="text-center text-gray-400 py-10">
           No hay puntos registrados aún.
         </div>

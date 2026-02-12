@@ -8,11 +8,11 @@ interface BreadcrumbItem {
 
 const props = defineProps<{
   /**
-   * Optional path for the back button
+   * Ruta opcional para el botón de volver
    */
   backTo?: string
   /**
-   * list of breadcrumb items
+   * lista de elementos de las migas de pan (breadcrumbs)
    */
   items: BreadcrumbItem[]
 }>()
@@ -20,7 +20,7 @@ const props = defineProps<{
 
 <template>
   <div class="mb-8 flex items-center gap-3">
-    <!-- Back Button -->
+    <!-- Botón de Volver -->
     <NuxtLink
       v-if="backTo"
       :to="backTo"
@@ -29,10 +29,10 @@ const props = defineProps<{
       <PhArrowLeft :size="20" weight="bold" />
     </NuxtLink>
 
-    <!-- Breadcrumb Items -->
+    <!-- Elementos de las Migas de Pan -->
     <h1 class="text-3xl font-thin text-brand-dark tracking-tight flex items-center">
       <template v-for="(item, index) in items" :key="index">
-        <!-- Item with Link -->
+        <!-- Elemento con Enlace -->
         <NuxtLink 
           v-if="item.to" 
           :to="item.to"
@@ -42,17 +42,17 @@ const props = defineProps<{
           {{ item.label }}
         </NuxtLink>
         
-        <!-- Item without Link -->
+        <!-- Elemento sin Enlace -->
         <span v-else :class="{ 'font-bold': index === items.length - 1 }">
           {{ item.label }}
         </span>
 
-        <!-- Separator -->
+        <!-- Separador -->
         <span v-if="index < items.length - 1" class="mx-1.5"><PhCaretRight :size="20" weight="bold" color="gray" /></span>
       </template>
     </h1>
 
-    <!-- Right Side Actions (e.g. Status) -->
+    <!-- Acciones del Lado Derecho (ej. Estado) -->
     <div class="ml-auto">
       <slot name="action" />
     </div>

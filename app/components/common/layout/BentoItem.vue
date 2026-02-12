@@ -4,7 +4,7 @@ const props = defineProps({
   cols: { type: Number, default: 1 }, 
   // Permite que una caja sea más alta
   rows: { type: Number, default: 1 },
-  // Título opcional de la caja (ej: "Live Commentary")
+  // Título opcional de la caja (ej: "Comentarios en vivo")
   title: { type: String, default: '' },
   // Variante de estilo: 'card' (blanco, padding) o 'raw' (sin estilos, para tarjetas custom)
   variant: { type: String, default: 'card' } 

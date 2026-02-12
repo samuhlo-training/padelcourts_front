@@ -4,13 +4,13 @@ import type { HistoryMatchSummary, HistoryMatchDetail } from "~/types";
 /**
  * █ [STORE] :: MATCH_STORE
  * =====================================================================
- * DESC:   Manages state for historical and live matches.
- * STATUS: ACTIVE
+ * DESC:   Gestiona el estado de los partidos históricos y en vivo.
+ * STATUS: ACTIVO
  * =====================================================================
  */
 export const useMatchStore = defineStore("match", () => {
   // ===========================================================================
-  // █ STATE
+  // █ ESTADO (STATE)
   // ===========================================================================
   const historyMatches = ref<HistoryMatchSummary[]>([]);
   const currentMatch = ref<HistoryMatchDetail | null>(null);
@@ -19,14 +19,14 @@ export const useMatchStore = defineStore("match", () => {
   const error = ref<string | null>(null);
 
   // ===========================================================================
-  // █ ACTIONS
+  // █ ACCIONES (ACTIONS)
   // ===========================================================================
 
   /**
-   * ◼️ FETCH HISTORY MATCHES
+   * ◼️ OBTENER PARTIDOS DEL HISTORIAL (FETCH HISTORY MATCHES)
    * ---------------------------------------------------------
-   * Retreives list of finished matches from API.
-   * Handles array/object response variance.
+   * Recupera la lista de partidos finalizados desde la API.
+   * Maneja la varianza de respuesta entre array y objeto.
    */
   const fetchHistoryMatches = async () => {
     loading.value = true;
@@ -34,47 +34,47 @@ export const useMatchStore = defineStore("match", () => {
     try {
       const rawData = await $fetch<any>("/api/matches");
 
-      // VALIDATE -> Check for array or data property
+      // VALIDAR -> Comprobar si es un array o una propiedad 'data'
       if (rawData && Array.isArray(rawData)) {
         historyMatches.value = rawData;
       } else if (rawData && rawData.data && Array.isArray(rawData.data)) {
         historyMatches.value = rawData.data;
       } else if (rawData) {
         console.error(
-          "Invalid API response for history matches (expected array or {data: array}):",
+          "Respuesta de API inválida para el historial de partidos (se esperaba array o {data: array}):",
           rawData,
         );
         historyMatches.value = [];
       }
     } catch (e: any) {
-      console.error("Error fetching history:", e);
-      error.value = e.message || "Error fetching history";
+      console.error("Error al obtener el historial:", e);
+      error.value = e.message || "Error al obtener el historial";
     } finally {
       loading.value = false;
     }
   };
 
   /**
-   * ◼️ FETCH MATCH DETAIL
+   * ◼️ OBTENER DETALLE DEL PARTIDO (FETCH MATCH DETAIL)
    * ---------------------------------------------------------
-   * Fetches specific match by ID.
-   * Clears current match before fetching new one.
+   * Obtiene un partido específico por ID.
+   * Limpia el partido actual antes de obtener uno nuevo.
    */
   const fetchMatchDetail = async (id: string | number) => {
-    // CACHE CHECK -> Skip if already loaded (Optional optimization)
+    // COMPROBACIÓN DE CACHÉ -> Omitir si ya está cargado (Optimización opcional)
     if (currentMatch.value?.id === id) {
-      // potential early return
+      // retorno temprano potencial
     }
 
     loading.value = true;
     error.value = null;
-    currentMatch.value = null; // RESET -> Clear previous data
+    currentMatch.value = null; // REINICIAR -> Limpiar datos previos
 
     try {
       const rawData = await $fetch<any>(`/api/matches/${id}`);
 
       if (rawData) {
-        // NORMALIZE -> Handle {data: ...} wrapper
+        // NORMALIZAR -> Manejar el wrapper {data: ...}
         if (rawData.data && typeof rawData.data === "object") {
           currentMatch.value = rawData.data;
         } else {
@@ -82,17 +82,17 @@ export const useMatchStore = defineStore("match", () => {
         }
       }
     } catch (e: any) {
-      console.error(`Error fetching match ${id}:`, e);
-      error.value = e.message || `Error fetching match ${id}`;
+      console.error(`Error al obtener el partido ${id}:`, e);
+      error.value = e.message || `Error al obtener el partido ${id}`;
     } finally {
       loading.value = false;
     }
   };
 
   /**
-   * ◼️ CLEAR CURRENT MATCH
+   * ◼️ LIMPIAR PARTIDO ACTUAL (CLEAR CURRENT MATCH)
    * ---------------------------------------------------------
-   * Resets active match state. Call on unmount.
+   * Reinicia el estado del partido activo. Llamar al desmontar.
    */
   const clearCurrentMatch = () => {
     currentMatch.value = null;
@@ -100,13 +100,13 @@ export const useMatchStore = defineStore("match", () => {
   };
 
   return {
-    // STATE
+    // ESTADO
     historyMatches,
     currentMatch,
     loading,
     error,
 
-    // ACTIONS
+    // ACCIONES
     fetchHistoryMatches,
     fetchMatchDetail,
     clearCurrentMatch,

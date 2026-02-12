@@ -1,16 +1,16 @@
 <script setup lang="ts">
 /**
- * █ [PAGE] :: COURTS_INDEX
+ * █ [PÁGINA] :: COURTS_INDEX
  * =====================================================================
- * DESC:   Main courts overview. Bento grid with occupied/free sections.
- *         Uses mock data until backend integration.
+ * DESC:   Resumen principal de las pistas. Cuadrícula Bento con secciones ocupadas/libres.
+ *         Usa datos simulados hasta la integración con el backend.
  * STATUS: WIP
  * =====================================================================
  */
 import type { Court } from '~/types'
 
 // =============================================================================
-// █ CORE: PAGE META
+// █ CORE: META DE LA PÁGINA
 // =============================================================================
 definePageMeta({
   layout: 'default',
@@ -21,21 +21,21 @@ useHead({
 })
 
 // =============================================================================
-// █ DATA: STORE & INIT
+// █ DATOS: TIENDA (STORE) E INICIALIZACIÓN
 // =============================================================================
 const courtsStore = useCourtsStore()
 const { courts } = storeToRefs(courtsStore)
 
-// INIT -> Fetch data via composable
+// INICIALIZACIÓN -> Obtener datos a través del composable
 const { init } = useCourtData()
 
-// MOUNT -> Initialize store
+// MONTAJE -> Inicializar la tienda
 onMounted(() => {
   init()
 })
 
 // =============================================================================
-// █ COMPUTED: FILTERED LISTS
+// █ COMPUTED: LISTAS FILTRADAS
 // =============================================================================
 const occupiedCourts = computed(() => courts.value.filter(c => c.status === 'occupied'))
 const freeCourts = computed(() => courts.value.filter(c => c.status === 'free'))
@@ -43,7 +43,7 @@ const freeCourts = computed(() => courts.value.filter(c => c.status === 'free'))
 
 <template>
   <!-- ======================================================================= -->
-  <!-- █ SECTION: PAGE TITLE -->
+  <!-- █ SECCIÓN: TÍTULO DE LA PÁGINA -->
   <!-- ======================================================================= -->
   <div class="mb-8">
     <h1 class="text-3xl font-black text-brand-dark tracking-tight ml-8">
@@ -52,13 +52,13 @@ const freeCourts = computed(() => courts.value.filter(c => c.status === 'free'))
   </div>
 
   <!-- ======================================================================= -->
-  <!-- █ SECTION: BENTO GRID -->
+  <!-- █ SECCIÓN: CUADRÍCULA BENTO -->
   <!-- ======================================================================= -->
   <CommonLayoutBentoGrid :cols="4" :rows="2">
 
-    <!-- --------------------------------------------------------------------- -->
-    <!-- █ OCCUPIED COURTS -->
-    <!-- --------------------------------------------------------------------- -->
+    <!-- ------------------------------------------------------------------- -->
+    <!-- █ PISTAS OCUPADAS -->
+    <!-- ------------------------------------------------------------------- -->
     <CommonLayoutBentoItem title="PISTAS OCUPADAS" :cols="2" :rows="2">
       <div class="space-y-3">
         <CourtsCourtStatusCard
@@ -67,16 +67,16 @@ const freeCourts = computed(() => courts.value.filter(c => c.status === 'free'))
           :court="court"
         />
 
-        <!-- EMPTY STATE -->
+        <!-- ESTADO VACÍO -->
         <p v-if="occupiedCourts.length === 0" class="text-sm text-gray-400 text-center py-8">
           No hay pistas ocupadas
         </p>
       </div>
     </CommonLayoutBentoItem>
 
-    <!-- --------------------------------------------------------------------- -->
-    <!-- █ FREE COURTS -->
-    <!-- --------------------------------------------------------------------- -->
+    <!-- ------------------------------------------------------------------- -->
+    <!-- █ PISTAS LIBRES -->
+    <!-- ------------------------------------------------------------------- -->
     <CommonLayoutBentoItem title="PISTAS LIBRES" :cols="2" :rows="2">
       <div class="flex flex-col gap-3">
        
@@ -87,7 +87,7 @@ const freeCourts = computed(() => courts.value.filter(c => c.status === 'free'))
           />
        
 
-        <!-- EMPTY STATE -->
+        <!-- ESTADO VACÍO -->
         <p v-if="freeCourts.length === 0" class="text-sm text-gray-400 text-center py-8">
           Todas las pistas están ocupadas
         </p>

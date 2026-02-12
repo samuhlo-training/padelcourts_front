@@ -1,10 +1,10 @@
 <script setup lang="ts">
 /**
- * █ [UI_ATOM] :: MAGIC_BUTTON
+ * █ [UI_ATOMO] :: MAGIC_BUTTON
  * =====================================================================
- * DESC:   CTA button "DO THE MAGIC >". Lime bg, bottom of sidebar.
- *         Uses PhCaretRight from @phosphor-icons/vue.
- * STATUS: STABLE
+ * DESC:   Botón CTA "DO THE MAGIC >". Fondo lima, parte inferior de la barra lateral.
+ *         Usa PhCaretRight de @phosphor-icons/vue.
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 import { PhCaretRight } from '@phosphor-icons/vue'
@@ -20,7 +20,7 @@ const COURT_ID = 5
 const isSimulating = ref(false)
 const currentMatchId = ref<number | null>(null)
 
-/** Sync button state with backend on mount (survives page reloads) */
+/** Sincronizar el estado del botón con el backend al montar (sobrevive a las recargas de página) */
 onMounted(async () => {
   try {
     const { activeSimulations } = await $fetch<{ activeSimulations: SimulationInfo[] }>('/api/simulator/status')
@@ -30,7 +30,7 @@ onMounted(async () => {
       isSimulating.value = true
     }
   } catch {
-    // Backend might be down — leave button in default state
+    // El backend podría estar caído — dejar el botón en el estado predeterminado
   }
 })
 
@@ -65,7 +65,7 @@ async function toggleMagic() {
     @click="toggleMagic"
     class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-brand-lime text-brand-dark text-xs font-bold uppercase tracking-wider rounded-full transition-all duration-200 hover:bg-brand-lime-hover hover:shadow-md active:scale-95"
   >
-    {{ isSimulating ? 'STOP THE MAGIC' : 'DO THE MAGIC' }}
+    {{ isSimulating ? 'DETENER LA MAGIA' : 'HACER LA MAGIA' }}
     <PhCaretRight :size="14" weight="bold" />
   </button>
 </template>

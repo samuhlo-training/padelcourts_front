@@ -1,10 +1,10 @@
 <script setup lang="ts">
 /**
- * █ [UI_ATOM] :: BIG_SCORE
+ * █ [UI_ATOMO] :: BIG_SCORE
  * =====================================================================
- * DESC:   Large game score display in brand-lime. Shows current game
- *         points like "40 - 00".
- * STATUS: STABLE
+ * DESC:   Gran visualización de la puntuación del juego en brand-lime. Muestra los
+ *         puntos del juego actual como "40 - 00".
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 

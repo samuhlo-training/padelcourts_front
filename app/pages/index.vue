@@ -1,16 +1,16 @@
 <script setup lang="ts">
 /**
- * █ [PAGE] :: HOME_REDIRECT
+ * █ [PÁGINA] :: HOME_REDIRECT
  * =====================================================================
- * DESC:   Redirects to /courts as the default landing page.
- * STATUS: STABLE
+ * DESC:   Redirige a /courts como página de inicio predeterminada.
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 definePageMeta({
   layout: 'default',
 })
 
-// REDIRECT -> Courts is the main entry point
+// REDIRIGIR -> Courts es el punto de entrada principal
 if (import.meta.server) {
   await navigateTo('/courts', { redirectCode: 302 })
 }

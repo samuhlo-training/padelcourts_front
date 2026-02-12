@@ -1,9 +1,9 @@
 /**
  * █ [COMPOSABLE] :: USE_COURT_DATA
  * =====================================================================
- * DESC:   Manages validation and fetching of initial court data.
- *         Decouples data fetching from the store (courts.store.ts).
- * STATUS: ACTIVE
+ * DESC:   Gestiona la validación y obtención de datos iniciales de las pistas.
+ *         Desacopla la obtención de datos del store (courts.store.ts).
+ * STATUS: ACTIVO
  * =====================================================================
  */
 
@@ -17,41 +17,41 @@ export const useCourtData = () => {
   const store = useCourtsStore();
 
   // ===========================================================================
-  // █ METHODS
+  // █ MÉTODOS (METHODS)
   // ===========================================================================
 
   /**
-   * ◼️ FETCH COURTS (INITIAL LOAD)
+   * ◼️ OBTENER PISTAS (CARGA INICIAL) [FETCH COURTS]
    * ---------------------------------------------------------
-   * REST Fetch to populate initial state.
-   * Maps backend data to frontend Court interface.
+   * REST Fetch para poblar el estado inicial.
+   * Mapea datos del backend a la interfaz Court del frontend.
    */
   const fetchCourts = async () => {
     store.loading = true;
     store.error = null;
 
     try {
-      console.log("[useCourtData] Fetching courts from /api/courts...");
+      console.log("[useCourtData] Obteniendo pistas desde /api/courts...");
 
-      // FETCH -> Explicit request to avoid hook ambiguity
+      // FETCH -> Solicitud explícita para evitar ambigüedad de hooks
       const data = await $fetch<any[]>("/api/courts");
 
       console.log("[useCourtData] Raw Data:", data);
 
       if (data) {
-        // MAP -> Backend DTO to Frontend Entity
+        // MAP -> DTO del Backend a Entidad del Frontend
         const mappedCourts: Court[] = data.map((c: any) => ({
           id: c.id,
           name: c.name,
           status: c.status === "busy" ? "occupied" : "free",
           activeMatchId: c.activeMatchId,
           lastMatchId: c.lastMatchId,
-          // CONSTRUCT -> Initial match state if active
+          // CONSTRUCT -> Estado inicial del partido si está activo
           currentMatch: c.activeMatchId
             ? {
                 id: c.activeMatchId,
                 type: "Partido",
-                elapsedTime: "00:00:00", // UPDATED BY WS/TIMER
+                elapsedTime: "00:00:00", // ACTUALIZADO POR WS/TIMER
                 isLive: true,
                 startTime: c.startTime,
                 pairAName: c.pairAName,
@@ -62,23 +62,23 @@ export const useCourtData = () => {
             c.status === "free" ? { type: "Partido amistoso" } : undefined,
         }));
 
-        // COMMIT -> Update Store
+        // COMMIT -> Actualizar Store
         store.setCourts(mappedCourts);
       }
     } catch (err: any) {
-      console.error("[useCourtData] Fetch Error:", err);
-      store.error = err.message || "Failed to load courts";
+      console.error("[useCourtData] Error al obtener:", err);
+      store.error = err.message || "Error al cargar las pistas";
     } finally {
       store.loading = false;
     }
   };
 
   /**
-   * ◼️ INIT SYSTEM
+   * ◼️ INICIALIZAR SISTEMA (INIT SYSTEM)
    * ---------------------------------------------------------
-   * Bootstraps the court system:
-   * 1. Fetches initial REST data
-   * 2. Establishes Websocket connection
+   * Arranca el sistema de pistas:
+   * 1. Obtiene datos REST iniciales
+   * 2. Establece conexión Websocket
    */
   const init = async () => {
     await fetchCourts();

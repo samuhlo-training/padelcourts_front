@@ -4,7 +4,7 @@
 
   # <code>BACKEND_SPECS</code>
 
-  **SYSTEM_ARCHITECTURE_AND_API_DOCUMENTATION**
+  **DOCUMENTACIÓN_DE_LA_API_Y_ARQUITECTURA_DEL_SISTEMA**
   <br />
 
   ![Bun](https://img.shields.io/badge/RUNTIME-BUN_1.x-000000?style=for-the-badge)
@@ -18,23 +18,23 @@
 
 ---
 
-### 00 __ ARCHITECTURE
+### 00 __ ARQUITECTURA
 
 ```mermaid
 graph TB
-    subgraph Clients
-        WEB[Web App]
-        IOT[Cámaras/IoT]
+    subgraph Clients["Clientes"]
+        WEB["Aplicación Web"]
+        IOT["Cámaras/IoT"]
     end
 
-    subgraph Server["Bun Server"]
-        HONO[Hono Router]
-        WS[WebSocket Server]
-        CTRL[Controllers]
-        ENGINE[PadelEngine]
+    subgraph Server["Servidor Bun"]
+        HONO["Router Hono"]
+        WS["Servidor WebSocket"]
+        CTRL["Controladores"]
+        ENGINE["PadelEngine"]
     end
 
-    subgraph Storage
+    subgraph Storage["Almacenamiento"]
         PG[(PostgreSQL)]
         REDIS[(Upstash Redis)]
     end
@@ -49,43 +49,43 @@ graph TB
     HONO --> REDIS
 ```
 
-| COMPONENT | TECH | NOTE |
+| COMPONENTE | TECNOLOGÍA | NOTA |
 | :--- | :--- | :--- |
-| **Runtime** | `Bun 1.x` | [Native ServerWebSocket] |
-| **Router** | `Hono` | [Standard REST API] |
-| **ORM** | `Drizzle` | [PostgreSQL Interface] |
-| **Cache** | `Redis` | [Upstash / Rate Limiting] |
+| **Entorno (Runtime)** | `Bun 1.x` | [Native ServerWebSocket] |
+| **Router** | `Hono` | [API REST Estándar] |
+| **ORM** | `Drizzle` | [Interfaz PostgreSQL] |
+| **Caché** | `Redis` | [Upstash / Limitación de tasa (Rate Limiting)] |
 
 <br>
 
-### 01 __ HTTP API
+### 01 __ API HTTP
 
-**BASE URL:** `/api`
+**URL BASE:** `/api`
 
-| METHOD | ENDPOINT | DESCRIPTION | TABLE |
+| MÉTODO | ENDPOINT | DESCRIPCIÓN | TABLA |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/matches` | List matches | `matches` |
-| `POST` | `/matches` | Create match | `matches` |
-| `POST` | `/matches/:id/point` | Register point | `point_history` |
-| `GET` | `/courts` | Court status | `courts` |
+| `GET` | `/matches` | Listar partidos | `matches` |
+| `POST` | `/matches` | Crear partido | `matches` |
+| `POST` | `/matches/:id/point` | Registrar punto | `point_history` |
+| `GET` | `/courts` | Estado de las pistas | `courts` |
 
-> **NOTE:** `POST /matches` creates initial 0-0 state. `POST /point` handles game logic via `PadelEngine`.
+> **NOTA:** `POST /matches` crea el estado inicial 0-0. `POST /point` gestiona la lógica del juego a través de `PadelEngine`.
 
 <br>
 
-### 02 __ WEBSOCKET API
+### 02 __ API WEBSOCKET
 
 **URL:** `ws://localhost:8000/ws`
-**RATE LIMIT:** 5 req / 10s per IP.
+**RATE LIMIT:** 5 sol / 10s por IP.
 
-#### A. CLIENT TYPES
+#### A. TIPOS DE CLIENTE
 
-| TYPE | AUTH | CAPABILITIES |
+| TIPO | AUTH | CAPACIDADES |
 | :--- | :--- | :--- |
-| **Spectator** | `None` | `SUBSCRIBE`, `REQUEST_STATS` |
-| **IoT Device** | `Token` | `TELEMETRY_EVENT` |
+| **Espectador** | `Ninguna` | `SUBSCRIBE`, `REQUEST_STATS` |
+| **Dispositivo IoT** | `Token` | `TELEMETRY_EVENT` |
 
-#### B. MESSAGE FLOW (PUBSUB)
+#### B. FLUJO DE MENSAJES (PUBSUB)
 
 ```mermaid
 flowchart LR
@@ -93,8 +93,8 @@ flowchart LR
         SUB["SUBSCRIBE {matchId}"]
     end
 
-    subgraph Server
-        WS[WS Handler]
+    subgraph Server["Servidor"]
+        WS["Manejador WS"]
         DB[(DB)]
     end
 
@@ -109,35 +109,35 @@ flowchart LR
 
 <br>
 
-### 03 __ DATA FLOWS
+### 03 __ FLUJOS DE DATOS
 
-#### 1. POINT SCORING (CRITICAL PATH)
-1.  **INPUT:** `POST /point` OR `TELEMETRY_EVENT`
-2.  **ENGINE:** `PadelEngine.processPoint(snapshot, side)`
-3.  **DB:** Transaction (`INSERT point`, `UPDATE stats`, `UPDATE match`)
-4.  **BROADCAST:** `server.publish(matchId, MATCH_UPDATE)`
+#### 1. PUNTUACIÓN (RUTA CRÍTICA)
+1.  **ENTRADA:** `POST /point` O `TELEMETRY_EVENT`
+2.  **MOTOR (ENGINE):** `PadelEngine.processPoint(snapshot, side)`
+3.  **DB:** Transacción (`INSERT point`, `UPDATE stats`, `UPDATE match`)
+4.  **DIFUSIÓN (BROADCAST):** `server.publish(matchId, MATCH_UPDATE)`
 
-#### 2. IOT AUTHENTICATION
-1.  **INPUT:** `AUTH_DEVICE { token }`
-2.  **CHECK:** `SELECT * FROM courts WHERE auth_token = ?`
-3.  **RESULT:** Associate Socket ID with Court ID.
-4.  **ENABLE:** Allow `TELEMETRY_EVENT` messages.
+#### 2. AUTENTICACIÓN IOT
+1.  **ENTRADA:** `AUTH_DEVICE { token }`
+2.  **VERIFICACIÓN:** `SELECT * FROM courts WHERE auth_token = ?`
+3.  **RESULTADO:** Asociar Socket ID con Court ID.
+4.  **ACTIVACIÓN:** Permitir mensajes `TELEMETRY_EVENT`.
 
 <br>
 
-### 04 __ DATABASE SCHEMA
+### 04 __ ESQUEMA DE BASE DE DATOS
 
-| TABLE | PK | DESCRIPTION |
+| TABLA | PK | DESCRIPCIÓN |
 | :--- | :--- | :--- |
-| `players` | `id` | Name, country, ranking |
-| `matches` | `id` | Current score, server, status |
-| `courts` | `id` | Auth token, active match ref |
-| `point_history` | `id` | Log of every point (replay) |
-| `match_stats` | `id` | Granular stats per player |
+| `players` | `id` | Nombre, país, ranking |
+| `matches` | `id` | Puntuación actual, servidor, estado |
+| `courts` | `id` | Token de auth, ref al partido activo |
+| `point_history` | `id` | Registro de cada punto (replay) |
+| `match_stats` | `id` | Estadísticas granulares por jugador |
 
 <br>
 
 <div align="center">
 <br />
-<code>DOCUMENTATION MAINTAINED BY <a href='https://github.com/samuhlo'>samuhlo</a></code>
+<code>DOCUMENTACIÓN MANTENIDA POR <a href='https://github.com/samuhlo'>samuhlo</a></code>
 </div>

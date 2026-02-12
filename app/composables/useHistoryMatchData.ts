@@ -6,35 +6,35 @@ export const useHistoryMatchData = () => {
   const { historyMatches, currentMatch, loading, error } = storeToRefs(store);
 
   /**
-   * Ensure history list is loaded.
-   * Useful for the main history page.
+   * Asegurar que la lista de historial esté cargada.
+   * Útil para la página principal del historial.
    */
   const loadHistory = async () => {
     await store.fetchHistoryMatches();
   };
 
   /**
-   * Load a specific match by ID.
-   * Useful for the detail pages.
+   * Cargar un partido específico por ID.
+   * Útil para las páginas de detalle.
    */
   const loadMatch = async (matchId: string | number) => {
     await store.fetchMatchDetail(matchId);
   };
 
   /**
-   * Get a player from the current match by ID.
-   * Helper for the player detail view.
+   * Obtener un jugador del partido actual por ID.
+   * Ayuda para la vista de detalle del jugador.
    */
   const getPlayerFromMatch = (playerId: string | number) => {
     if (!currentMatch.value) return null;
 
     const pId = Number(playerId);
 
-    // Search in Team A
+    // Buscar en Equipo A
     const pA = currentMatch.value.teamA.players.find((p) => p.id === pId);
     if (pA) return { ...pA, teamName: currentMatch.value.teamA.name };
 
-    // Search in Team B
+    // Buscar en Equipo B
     const pB = currentMatch.value.teamB.players.find((p) => p.id === pId);
     if (pB) return { ...pB, teamName: currentMatch.value.teamB.name };
 
@@ -42,13 +42,13 @@ export const useHistoryMatchData = () => {
   };
 
   return {
-    // State (Reactive)
+    // Estado (Reactivo)
     historyMatches,
     currentMatch,
     loading,
     error,
 
-    // Methods
+    // Métodos
     loadHistory,
     loadMatch,
     getPlayerFromMatch,

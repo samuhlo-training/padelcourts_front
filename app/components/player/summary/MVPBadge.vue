@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /**
- * █ [UI_ATOM] :: MVP_BADGE
+ * █ [UI_ATOMO] :: MVP_BADGE
  * =====================================================================
- * DESC:   "Mejor jugador" label badge for the MVP card.
- * STATUS: STABLE
+ * DESC:   Etiqueta de "Mejor jugador" para la tarjeta MVP.
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 </script>

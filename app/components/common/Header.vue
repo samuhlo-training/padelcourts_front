@@ -2,15 +2,15 @@
 /**
  * █ [UI_LAYOUT] :: HEADER
  * =====================================================================
- * DESC:   Top bar. Fixed. Contains only the brand logo.
- * STATUS: STABLE
+ * DESC:   Barra superior. Fija. Contiene solo el logo de la marca.
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 </script>
 
 <template>
   <!-- ======================================================================= -->
-  <!-- █ SECTION: TOP HEADER BAR -->
+  <!-- █ SECCIÓN: BARRA DE CABECERA SUPERIOR -->
   <!-- ======================================================================= -->
   <header class="h-16 bg-white/80 backdrop-blur-sm border-b border-gray-100 flex-none">
     <div class="h-full px-6 flex items-center">

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /**
- * █ [UI_ATOM] :: MAIN_LOGO
+ * █ [UI_ATOMO] :: MAIN_LOGO
  * =====================================================================
- * DESC:   Brand logo "PADEL // LOGO". Italic + separator styling.
- * STATUS: STABLE
+ * DESC:   Logo de la marca "PADEL // LOGO". Estilo en cursiva + separador.
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 </script>

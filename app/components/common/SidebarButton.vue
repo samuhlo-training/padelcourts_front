@@ -1,10 +1,10 @@
 <script setup lang="ts">
 /**
- * █ [UI_ATOM] :: SIDEBAR_BUTTON
+ * █ [UI_ATOMO] :: SIDEBAR_BUTTON
  * =====================================================================
- * DESC:   Navigation item for the sidebar. Active state = dark bg + white text.
- *         Uses @phosphor-icons/vue for crisp, consistent icons.
- * STATUS: STABLE
+ * DESC:   Elemento de navegación para la barra lateral. Estado activo = fondo oscuro + texto blanco.
+ *         Usa @phosphor-icons/vue para iconos nítidos y consistentes.
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 import { PhSquaresFour, PhClockCounterClockwise } from '@phosphor-icons/vue'
@@ -18,13 +18,13 @@ defineProps<{
   icon: string
 }>()
 
-// ICON MAP -> Maps string keys to Phosphor components
+// MAPA DE ICONOS -> Mapea claves de cadena a componentes Phosphor
 const iconMap: Record<string, ReturnType<typeof defineComponent>> = {
   grid: PhSquaresFour,
   list: PhClockCounterClockwise,
 }
 
-// ACTIVE DETECTION -> Uses NuxtLink's built-in route matching
+// DETECCIÓN DE ACTIVO -> Usa el emparejamiento de rutas integrado de NuxtLink
 const route = useRoute()
 </script>
 
@@ -38,7 +38,7 @@ const route = useRoute()
         : 'text-gray-500 hover:bg-gray-100 hover:text-brand-dark'
     ]"
   >
-    <!-- ICON -> Phosphor icon component from map -->
+    <!-- ICONO -> Componente de icono Phosphor desde el mapa -->
     <component
       :is="iconMap[icon]"
       :size="20"
@@ -47,7 +47,7 @@ const route = useRoute()
 
     <span>{{ label }}</span>
 
-    <!-- ACTIVE INDICATOR -> Small lime dot -->
+    <!-- INDICADOR DE ACTIVO -> Pequeño punto color lima -->
     <span
       v-if="route.path === to"
       class="ml-auto w-2 h-2 rounded-full bg-brand-lime"

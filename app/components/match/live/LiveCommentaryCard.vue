@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /**
- * █ [UI_MOLECULE] :: LIVE_COMMENTARY_CARD
+ * █ [UI_MOLECULA] :: LIVE_COMMENTARY_CARD
  * =====================================================================
- * DESC:   Scrollable feed of live commentary entries.
- *         Shows PhRss icon in header for broadcasting feel.
+ * DESC:   Feed desplazable de entradas de comentarios en vivo.
+ *         Muestra el icono PhRss en la cabecera para dar sensación de emisión.
  * STATUS: STABLE
  * =====================================================================
  */
@@ -23,7 +23,7 @@ defineProps<{
     <!-- HEADER -->
     <div class="flex items-center justify-between mb-4">
       <h3 class="text-sm font-bold text-brand-dark uppercase tracking-wider">
-        Live comentary
+        Comentarios en vivo
       </h3>
       <PhRss :size="18" weight="bold" class="text-brand-lime" />
     </div>

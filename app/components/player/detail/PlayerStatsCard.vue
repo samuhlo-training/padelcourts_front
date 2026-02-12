@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /**
- * █ [COMPONENT] :: PLAYER STATS CARD
+ * █ [COMPONENTE] :: PLAYER STATS CARD
  * =====================================================================
- * DESC:   Detailed stats for a player in a specific match.
- *         Shows breakdown of strokes (winners/errors).
+ * DESC:   Estadísticas detalladas de un jugador en un partido específico.
+ *         Muestra el desglose de golpes (ganadores/errores).
  * PROPS:  player (PlayerMatchStats), teamName (string)
  * STATUS: MOCK
  * =====================================================================
@@ -29,17 +29,17 @@ const props = defineProps<{
   player: PlayerDetails
 }>()
 
-// Helper for row highlighting (optional, maybe zebra striping or just clean white)
+// Ayudante para el resaltado de filas (opcional, tal vez de cebra o simplemente blanco limpio)
 </script>
 
 <template>
   <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 flex flex-col h-full">
     
-    <!-- HEADER -->
+    <!-- CABECERA -->
     <div class="flex justify-between items-start mb-6">
       <div>
         <h2 class="text-2xl font-bold text-brand-dark leading-tight">{{ player.name }}</h2>
-        <p class="text-gray-500 font-medium">Estadisticas del partido</p>
+        <p class="text-gray-500 font-medium">Estadísticas del partido</p>
       </div>
       <div class="text-right">
         <div class="text-sm font-semibold text-gray-500">{{ player.teamName }}</div>
@@ -47,10 +47,10 @@ const props = defineProps<{
       </div>
     </div>
 
-    <!-- TABLE -->
+    <!-- TABLA -->
     <div class="flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
       <table class="w-full text-left border-collapse">
-        <!-- THEAD (Hidden visually based on design but semantic) -->
+        <!-- THEAD (Oculto visualmente según el diseño pero semántico) -->
         <thead>
           <tr class="text-xs text-gray-400 font-bold uppercase border-b border-gray-100">
             <th class="py-2 font-normal">Golpe</th>
@@ -74,7 +74,7 @@ const props = defineProps<{
       </table>
     </div>
 
-    <!-- FOOTER: TOTALS -->
+    <!-- PIE DE PÁGINA: TOTALES -->
     <div class="mt-8 pt-6 border-t border-gray-100 flex justify-center gap-12">
       <div class="flex flex-col items-center">
         <span class="text-3xl font-black text-brand-green">{{ player.totalPoints }}</span>

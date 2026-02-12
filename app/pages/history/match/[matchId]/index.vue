@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /**
- * █ [PAGE] :: HISTORY_DETAIL
+ * █ [PÁGINA] :: DETALLE_HISTORIAL
  * =====================================================================
- * DESC:   Detailed view of a past match.
- *         Shows match summary and player stats.
+ * DESC:   Vista detallada de un partido pasado.
+ *         Muestra el resumen del partido y las estadísticas del jugador.
  * STATUS: MOCK
  * =====================================================================
  */
@@ -22,7 +22,7 @@ useHead({
 })
 
 // =============================================================================
-// █ DATA: FETCHING
+// █ DATOS: OBTENCIÓN (FETCHING)
 // =============================================================================
 const { currentMatch: matchData, loading: pending, error, loadMatch } = useHistoryMatchData()
 
@@ -32,7 +32,7 @@ onMounted(() => {
   }
 })
 
-// Helpers for variant logic
+// Ayudantes para la lógica de variantes
 const getVariant = (side: 'A' | 'B', isMvp: boolean) => {
   if (isMvp) return 'mvp'
   return side === 'A' ? 'team-a' : 'team-b'
@@ -42,7 +42,7 @@ const getVariant = (side: 'A' | 'B', isMvp: boolean) => {
 <template>
   <div class="flex flex-col h-full">
     
-    <!-- HEADER: BREADCRUMBS -->
+    <!-- CABECERA: MIGAS DE PAN (BREADCRUMBS) -->
     <CommonBreadCrumbs 
       back-to="/history"
       :items="[
@@ -51,22 +51,22 @@ const getVariant = (side: 'A' | 'B', isMvp: boolean) => {
       ]"
     />
 
-    <!-- LOADING STATE -->
+    <!-- ESTADO DE CARGA -->
     <div v-if="pending" class="flex-1 flex flex-col items-center justify-center opacity-50">
       <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-brand-lime"></div>
     </div>
 
-    <!-- ERROR STATE -->
+    <!-- ESTADO DE ERROR -->
     <div v-else-if="error" class="flex-1 flex flex-col items-center justify-center text-red-400">
       <p>Error al cargar el partido {{ matchId }}</p>
       <p class="text-xs opacity-60">{{ error }}</p>
     </div>
 
-    <!-- MAIN GRID -->
+    <!-- CUADRÍCULA PRINCIPAL -->
     <CommonLayoutBentoGrid v-else-if="matchData" :cols="4" :rows="3">
       
       <!-- ------------------------------------------------------------------- -->
-      <!-- █ MATCH SUMMARY CARD (Full Width Top) -->
+      <!-- █ TARJETA DE RESUMEN DEL PARTIDO (Ancho completo arriba) -->
       <!-- ------------------------------------------------------------------- -->
       <CommonLayoutBentoItem :cols="4" :rows="2">
         <MatchHistoryBigCard :match="matchData" />
@@ -86,7 +86,7 @@ const getVariant = (side: 'A' | 'B', isMvp: boolean) => {
         <div v-if="player.isMvp" class="mt-2 text-center text-xs font-bold italic text-brand-dark">Mejor jugador</div>
       </CommonLayoutBentoItem>
 
-      <!-- TEAM B PLAYERS -->
+      <!-- JUGADORES DEL EQUIPO B -->
       <CommonLayoutBentoItem :cols="1" :rows="1" variant="raw" v-for="(player, idx) in matchData.teamB.players" :key="`b-${idx}`">
         <PlayerMiniCard 
            :player="player" 

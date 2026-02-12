@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /**
- * █ [UI_ATOM] :: BIG_SET_SCORE
+ * █ [UI_ATOMO] :: BIG_SET_SCORE
  * =====================================================================
- * DESC:   Displays the score of a single set row.
- * STATUS: STABLE
+ * DESC:   Muestra la puntuación de una fila de un solo set.
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 defineProps<{

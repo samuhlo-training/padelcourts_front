@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /**
- * █ [UI_ATOM] :: MATCH_SCORE
+ * █ [UI_ATOMO] :: MATCH_SCORE
  * =====================================================================
- * DESC:   Black circle pill showing total sets won (e.g. "1 - 0").
- * STATUS: STABLE
+ * DESC:   Pastilla circular negra que muestra el total de sets ganados (ej. "1 - 0").
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 

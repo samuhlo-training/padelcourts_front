@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * █ [PAGE] :: COURT_LIVE
+ * █ [PÁGINA] :: COURT_LIVE
  * =====================================================================
- * DESC:   Live match view for a specific court. Bento grid layout with
- *         MatchLiveCard (2 cols), LiveCommentaryCard and PlayerMiniCard.
- *         Connects to WebSocket via activeMatchStore.
- * STATUS: INTEGRATED
+ * DESC:   Vista de partido en vivo para una pista específica. Diseño de cuadrícula Bento con
+ *         MatchLiveCard (2 columnas), LiveCommentaryCard y PlayerMiniCard.
+ *         Se conecta a WebSocket a través de activeMatchStore.
+ * STATUS: INTEGRADO (INTEGRATED)
  * =====================================================================
  */
 
@@ -16,7 +16,7 @@ import { useActiveMatchStore } from '~/stores/activeMatch.store'
 import { storeToRefs } from 'pinia'
 
 // =============================================================================
-// █ CORE: PAGE META
+// █ CORE: META DE LA PÁGINA
 // =============================================================================
 const route = useRoute()
 const courtId = computed(() => route.params.id)
@@ -30,13 +30,13 @@ useHead({
 })
 
 // =============================================================================
-// █ DATA: STORE INTEGRATION
+// █ DATOS: INTEGRACIÓN CON LA TIENDA (STORE)
 // =============================================================================
 const store = useActiveMatchStore()
 const courtsStore = useCourtsStore()
 const { match, commentary, isConnected } = storeToRefs(store)
 
-/** Resolve the activeMatchId for this court from the courts store */
+/** Resolver el activeMatchId para esta pista desde la tienda de pistas */
 const activeMatchId = computed(() => {
   const court = courtsStore.courts.find((c) => c.id === Number(courtId.value))
   return court?.activeMatchId ?? null
@@ -65,8 +65,8 @@ const mvpPlayer = computed(() => {
     }
   }
 
-  // Find player with highest pointsWon
-  // We know match.value is defined and stats has at least 1 element because of the check above
+  // Encontrar al jugador con más puntos ganados (pointsWon)
+  // Sabemos que match.value está definido y stats tiene al menos 1 elemento debido a la comprobación anterior
   const stats = match.value!.stats!
   const firstPlayer = stats[0]
   
@@ -89,7 +89,7 @@ const mvpPlayer = computed(() => {
 
 <template>
   <!-- ======================================================================= -->
-  <!-- █ SECTION: BREADCRUMB -->
+  <!-- █ SECCIÓN: MIGAS DE PAN (BREADCRUMB) -->
   <!-- ======================================================================= -->
   <CommonBreadCrumbs 
     back-to="/courts"
@@ -100,7 +100,7 @@ const mvpPlayer = computed(() => {
   >
     <template #action>
       <span v-if="match?.isLive && isConnected" class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded animate-pulse">
-        LIVE
+        EN VIVO
       </span>
       <span v-else-if="match && !match.isLive" class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-bold rounded">
         FINALIZADO
@@ -112,26 +112,26 @@ const mvpPlayer = computed(() => {
   </CommonBreadCrumbs>
 
   <!-- ======================================================================= -->
-  <!-- █ SECTION: BENTO GRID (3 cols) -->
+  <!-- █ SECCIÓN: CUADRÍCULA BENTO (3 columnas) -->
   <!-- ======================================================================= -->
   <CommonLayoutBentoGrid v-if="match" :cols="3" :rows="3">
 
     <!-- ------------------------------------------------------------------- -->
-    <!-- █ MATCH LIVE CARD (2 cols * 3 rows) -->
+    <!-- █ TARJETA DE PARTIDO EN VIVO (2 columnas * 3 filas) -->
     <!-- ------------------------------------------------------------------- -->
     <CommonLayoutBentoItem :cols="2" :rows="3">
       <MatchLiveCard :match="match" />
     </CommonLayoutBentoItem>
 
     <!-- ------------------------------------------------------------------- -->
-    <!-- █ LIVE COMMENTARY (1 col * 2 rows) -->
+    <!-- █ COMENTARIOS EN VIVO (1 columna * 2 filas) -->
     <!-- ------------------------------------------------------------------- -->
     <CommonLayoutBentoItem :rows="2">
       <LiveCommentaryCard :entries="commentary"  />
     </CommonLayoutBentoItem>
 
     <!-- ------------------------------------------------------------------- -->
-    <!-- █ MVP PLAYER CARD (1 col * 1 row) -->
+    <!-- █ TARJETA DE JUGADOR MVP (1 columna * 1 fila) -->
     <!-- ------------------------------------------------------------------- -->
     <CommonLayoutBentoItem variant="raw">
       <PlayerMiniCard :player="mvpPlayer" variant="mvp" />
@@ -139,7 +139,7 @@ const mvpPlayer = computed(() => {
 
   </CommonLayoutBentoGrid>
 
-  <!-- LOADING STATE -->
+  <!-- ESTADO DE CARGA -->
   <div v-else class="flex items-center justify-center p-12 text-gray-400 font-medium">
     <div class="animate-spin mr-3 h-5 w-5 border-2 border-brand-lime border-t-transparent rounded-full"></div>
     Conectando al partido...

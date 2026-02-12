@@ -1,8 +1,8 @@
 /**
  * █ [COMPOSABLE] :: USE_WEBSOCKET
  * =====================================================================
- * DESC:   Manages raw WebSocket connection, reconnection, and messaging.
- *         Provides methods to subscribe/unsubscribe to topics.
+ * DESC:   Gestiona la conexión WebSocket pura, reconexión y mensajería.
+ *         Proporciona métodos para suscribirse/desuscribirse a tópicos.
  * STATUS: WIP
  * =====================================================================
  */
@@ -10,41 +10,41 @@ import type { WebSocketMessage } from "~/types";
 
 export const useWebSocket = () => {
   // ===========================================================================
-  // █ STATE
+  // █ ESTADO (STATE)
   // ===========================================================================
   const socket = ref<WebSocket | null>(null);
   const isConnected = ref(false);
   const error = ref<Event | null>(null);
   const messages = ref<WebSocketMessage[]>([]);
 
-  // Event listeners
+  // Manejadores de eventos (listeners)
   const messageHandlers = new Set<(msg: WebSocketMessage) => void>();
 
-  // Configuration
+  // Configuración
   let reconnectAttempts = 0;
   const maxReconnectAttempts = 5;
   const reconnectInterval = 2000;
   let explicitClose = false;
 
   // ===========================================================================
-  // █ METHODS
+  // █ MÉTODOS (METHODS)
   // ===========================================================================
 
   /**
-   * Connect to the WebSocket server
+   * Conectar al servidor WebSocket
    */
   const connect = (url: string) => {
-    if (typeof window === "undefined") return; // SSR Guard
+    if (typeof window === "undefined") return; // Guardia SSR
     if (socket.value?.readyState === WebSocket.OPEN) return;
 
-    console.log(`[WS] Connecting to ${url}...`);
+    console.log(`[WS] Conectando a ${url}...`);
     explicitClose = false;
 
     try {
       const ws = new WebSocket(url);
 
       ws.onopen = () => {
-        console.log("[WS] Connected");
+        console.log("[WS] Conectado");
         isConnected.value = true;
         error.value = null;
         reconnectAttempts = 0;
@@ -52,14 +52,14 @@ export const useWebSocket = () => {
       };
 
       ws.onclose = (e) => {
-        console.log("[WS] Disconnected", e.code, e.reason);
+        console.log("[WS] Desconectado", e.code, e.reason);
         isConnected.value = false;
         socket.value = null;
 
         if (!explicitClose && reconnectAttempts < maxReconnectAttempts) {
           reconnectAttempts++;
           console.log(
-            `[WS] Reconnecting in ${reconnectInterval}ms (${reconnectAttempts}/${maxReconnectAttempts})...`,
+            `[WS] Reconectando en ${reconnectInterval}ms (${reconnectAttempts}/${maxReconnectAttempts})...`,
           );
           setTimeout(() => connect(url), reconnectInterval);
         }
@@ -75,19 +75,19 @@ export const useWebSocket = () => {
           const validMessage = JSON.parse(event.data) as WebSocketMessage;
           messages.value.push(validMessage);
 
-          // Notify handlers
+          // Notificar a los manejadores
           messageHandlers.forEach((handler) => handler(validMessage));
         } catch (err) {
-          console.warn("[WS] Failed to parse message:", event.data);
+          console.warn("[WS] Error al parsear el mensaje:", event.data);
         }
       };
     } catch (e) {
-      console.error("[WS] Connection failed:", e);
+      console.error("[WS] Conexión fallida:", e);
     }
   };
 
   /**
-   * Disconnect manually
+   * Desconectar manualmente
    */
   const disconnect = () => {
     explicitClose = true;
@@ -97,32 +97,32 @@ export const useWebSocket = () => {
   };
 
   /**
-   * Send a raw message
+   * Enviar un mensaje puro
    */
   const send = (msg: object) => {
     if (socket.value?.readyState === WebSocket.OPEN) {
       socket.value.send(JSON.stringify(msg));
     } else {
-      console.warn("[WS] Cannot send, socket not open");
+      console.warn("[WS] No se puede enviar, el socket no está abierto");
     }
   };
 
   /**
-   * Subscribe to a match topic
+   * Suscribirse al tópico de un partido
    */
   const subscribe = (matchId: string | number) => {
     send({ type: "SUBSCRIBE", matchId: String(matchId) });
   };
 
   /**
-   * Unsubscribe from a match topic
+   * Desuscribirse del tópico de un partido
    */
   const unsubscribe = (matchId: string | number) => {
     send({ type: "UNSUBSCRIBE", matchId: String(matchId) });
   };
 
   /**
-   * Register a message handler
+   * Registrar un manejador de mensajes
    */
   const onMessage = (handler: (msg: WebSocketMessage) => void) => {
     messageHandlers.add(handler);

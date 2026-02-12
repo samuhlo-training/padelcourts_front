@@ -1,13 +1,13 @@
 <script setup lang="ts">
 /**
- * █ [PAGE] :: PLAYER HISTORY DETAIL
+ * █ [PÁGINA] :: DETALLE_HISTORIAL_JUGADOR
  * =====================================================================
- * DESC:   Detailed view of a player's performance in a specific match.
+ * DESC:   Vista detallada del rendimiento de un jugador en un partido específico.
  * STATUS: MOCK
  * =====================================================================
  */
 import PlayerStatsCard from '~/components/player/detail/PlayerStatsCard.vue'
-import PointHistoryList from '~/components/player/detail/PointHistoryList.vue'
+import PointHistoryList, { type PointHistoryItem } from '~/components/player/detail/PointHistoryList.vue'
 
 definePageMeta({
   layout: 'default',
@@ -22,12 +22,12 @@ useHead({
 })
 
 // =============================================================================
-// █ DATA: FETCHING
+// █ DATOS: OBTENCIÓN (FETCHING)
 // =============================================================================
 const { currentMatch, loading: pending, error, loadMatch, getPlayerFromMatch } = useHistoryMatchData()
 
 onMounted(async () => {
-  // If fetching match detail failed or empty in previous page, we might need to load it here
+  // Si la obtención del detalle del partido falló o estaba vacía en la página anterior, podríamos necesitar cargarla aquí
   if (!currentMatch.value || String(currentMatch.value.id) !== String(matchId.value)) {
     await loadMatch(matchId.value)
   }
@@ -37,7 +37,7 @@ const playerData = computed(() => {
   const p = getPlayerFromMatch(playerId.value)
   if (!p) return null
   
-  // Map stats object to strokes array for PlayerStatsCard
+  // Mapear el objeto stats al array strokes para PlayerStatsCard
   const strokeMapping = [
     { name: 'Winners', winners: p.stats?.winners || 0, errors: 0 },
     { name: 'Smash', winners: p.stats?.smashWinners || 0, errors: 0 },
@@ -60,21 +60,21 @@ const playerData = computed(() => {
   }
 })
 
-// Map pointHistory to PointHistoryList format
+// Mapear pointHistory al formato de PointHistoryList
 const items = computed(() => {
   if (!currentMatch.value?.pointHistory) return []
   
   const pId = Number(playerId.value)
   
-  // Only show points where this player was the protagonist (won the point or made the error)
+  // Mostrar solo los puntos donde este jugador fue el protagonista (ganó el punto o cometió el error)
   return currentMatch.value.pointHistory
     .filter(pt => pt.winnerId === pId || pt.opponentErrorId === pId)
     .map(pt => ({
       id: pt.id,
-      stroke: pt.stroke || (pt.winnerId === pId ? 'Ganador' : 'Error'),
-      timestamp: pt.timestamp, // Assuming backend provides a "time elapsed" string or similar
+      stroke: (pt.stroke as any) || (pt.winnerId === pId ? 'winner' : 'error'),
+      timestamp: pt.timestamp, // Asumiendo que el backend proporciona una cadena de "tiempo transcurrido" o similar
       isWinner: pt.winnerId === pId
-    }))
+    })) as PointHistoryItem[]
 })
 
 const matchIdStr = matchId
@@ -84,7 +84,7 @@ const matchIdStr = matchId
 <template>
   <div class="flex flex-col h-full">
     
-    <!-- HEADER: BREADCRUMBS -->
+    <!-- CABECERA: MIGAS DE PAN (BREADCRUMBS) -->
     <CommonBreadCrumbs 
       :back-to="`/history/match/${matchIdStr}`"
       :items="[
@@ -94,30 +94,30 @@ const matchIdStr = matchId
       ]"
     />
 
-    <!-- LOADING -->
+    <!-- CARGANDO -->
     <div v-if="pending" class="flex-1 flex flex-col items-center justify-center opacity-50">
       <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-brand-lime"></div>
     </div>
 
-    <!-- ERROR or NOT FOUND -->
+    <!-- ERROR o NO ENCONTRADO -->
     <div v-else-if="error || !playerData" class="flex-1 flex flex-col items-center justify-center text-red-400">
       <p>Error al cargar datos del jugador</p>
       <p v-if="error" class="text-xs opacity-60">{{ error }}</p>
       <p v-else class="text-xs opacity-60">Jugador no encontrado en este partido</p>
     </div>
 
-    <!-- MAIN GRID -->
-    <!-- 3 Cols total. Left 2, Right 1. -->
+    <!-- CUADRÍCULA PRINCIPAL -->
+    <!-- 3 columnas en total. Izquierda 2, Derecha 1. -->
     <CommonLayoutBentoGrid v-else :cols="3" :rows="1">
       
-      <!-- LEFT: STATS BREAKDOWN -->
+      <!-- IZQUIERDA: DESGLOSE DE ESTADÍSTICAS -->
       <CommonLayoutBentoItem :cols="2" :rows="1" variant="raw">
         <PlayerStatsCard 
           :player="playerData" 
         />
       </CommonLayoutBentoItem>
 
-      <!-- RIGHT: POINT HISTORY -->
+      <!-- DERECHA: HISTORIAL DE PUNTOS -->
       <CommonLayoutBentoItem :cols="1" :rows="1" variant="raw">
         <div v-if="items.length === 0" class="h-full flex items-center justify-center bg-white rounded-2xl p-6 text-gray-400 text-sm text-center">
           Detalle de puntos no disponible en el historial

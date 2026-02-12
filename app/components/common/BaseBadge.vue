@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /**
- * █ [UI_ATOM] :: BASE_BADGE
+ * █ [UI_ATOMO] :: BASE_BADGE
  * =====================================================================
- * DESC:   Reusable badge with two variants: lime (occupied) and outline (free).
- * STATUS: STABLE
+ * DESC:   Badge reutilizable con dos variantes: lime (ocupada) y outline (libre).
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 

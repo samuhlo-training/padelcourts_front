@@ -1,16 +1,16 @@
 /**
- * █ [DOMAIN] :: TYPES
+ * █ [DOMINIO] :: TIPOS
  * =====================================================================
- * DESC:   Core domain interfaces for all features.
+ * DESC:   Interfaces centrales del dominio para todas las funcionalidades.
  * STATUS: WIP
  * =====================================================================
  */
 
 // =============================================================================
-// █ COURT DOMAIN
+// █ DOMINIO DE PISTAS (COURT)
 // =============================================================================
 
-/** Match info attached to an occupied court */
+/** Información del partido asociada a una pista ocupada */
 interface CourtMatch {
   id?: number;
   type: string;
@@ -21,12 +21,12 @@ interface CourtMatch {
   pairBName?: string;
 }
 
-/** Last match info attached to a free court */
+/** Información del último partido asociada a una pista libre */
 interface CourtLastMatch {
   type: string;
 }
 
-/** Single court entity */
+/** Entidad de pista individual */
 interface Court {
   id: number;
   name: string;
@@ -38,33 +38,33 @@ interface Court {
 }
 
 // =============================================================================
-// █ MATCH LIVE DOMAIN
+// █ DOMINIO DE PARTIDO EN VIVO (MATCH LIVE)
 // =============================================================================
 
-/** Team info for a live match */
+/** Información del equipo para un partido en vivo */
 interface TeamData {
   name: string;
   players: string[];
 }
 
-/** Raw match snapshot as sent by the backend (mirrors the DB row + enriched data) */
+/** Snapshot bruto del partido enviado por el backend (refleja la fila de la DB + datos enriquecidos) */
 interface BackendMatchSnapshot {
   id: number;
   matchType: string;
-  // Team Names
+  // Nombres de los equipos
   pairAName: string;
   pairBName: string;
-  // Player IDs
+  // IDs de los jugadores
   pairAPlayer1Id: number;
   pairAPlayer2Id: number;
   pairBPlayer1Id: number;
   pairBPlayer2Id: number;
-  // Player Names (Enriched)
+  // Nombres de los jugadores (Enriquecidos)
   pairAPlayer1Name?: string;
   pairAPlayer2Name?: string;
   pairBPlayer1Name?: string;
   pairBPlayer2Name?: string;
-  // Score
+  // Puntuación
   pairAScore: string;
   pairBScore: string;
   pairAGames: number;
@@ -72,35 +72,35 @@ interface BackendMatchSnapshot {
   pairASets: number;
   pairBSets: number;
   currentSetIdx: number;
-  // Flags
+  // Indicadores
   isTieBreak: boolean;
   hasGoldPoint: boolean;
   status: string;
   winnerSide: string | null;
-  // Serving
+  // Saque
   servingPlayerId: number;
   servingPlayerName?: string;
-  // Timing
+  // Tiempos
   startTime: string | null;
   endTime: string | null;
   createdAt: string;
-  // Court
+  // Pista
   courtId: number | null;
-  // Set History
+  // Historial de Sets
   sets?: Array<{ setNumber: number; pairAGames: number; pairBGames: number }>;
-  // Stats
+  // Estadísticas
   stats?: PlayerStats[];
 }
 
-/** Full live match state (frontend-friendly shape) */
+/** Estado completo del partido en vivo (formato amigable para el frontend) */
 interface LiveMatchData {
   id: number;
   courtName: string;
   type: string;
-  // Timing
+  // Tiempos
   startTime: string | null;
-  elapsedMinutes: number; // Keep for fallback/compat
-  // Score
+  elapsedMinutes: number; // Mantener por compatibilidad
+  // Puntuación
   currentSet: number;
   setScoreA: number;
   setScoreB: number;
@@ -108,19 +108,19 @@ interface LiveMatchData {
   pointsB: string;
   setsWonA: number;
   setsWonB: number;
-  // Teams
+  // Equipos
   teamA: TeamData;
   teamB: TeamData;
-  // State
+  // Estado
   isLive: boolean;
   servingPlayerName?: string;
-  // History
+  // Historial
   sets: Array<{ setNumber: number; pairAGames: number; pairBGames: number }>;
-  // Stats
+  // Estadísticas
   stats: PlayerStats[];
 }
 
-/** Single commentary entry */
+/** Entrada individual de comentario */
 interface CommentaryEntry {
   id: number;
   text: string;
@@ -136,7 +136,7 @@ interface PlayerStats {
   smashWinners: number;
 }
 
-/** MVP player summary */
+/** Resumen de jugador MVP */
 interface PlayerMVPData {
   name: string;
   points: number;
@@ -158,14 +158,14 @@ export type {
 };
 
 // =============================================================================
-// █ WEBSOCKET DOMAIN
+// █ DOMINIO DE WEBSOCKET
 // =============================================================================
 
-/** Standard WebSocket message from server */
+/** Mensaje estándar de WebSocket desde el servidor */
 interface WebSocketMessage<T = any> {
   type:
     | "MATCH_UPDATE"
-    | "MATCH_FINISHED" // New event
+    | "MATCH_FINISHED" // Nuevo evento
     | "COMMENTARY"
     | "WELCOME"
     | "SUBSCRIBED"
@@ -174,14 +174,14 @@ interface WebSocketMessage<T = any> {
     | "ERROR";
   data?: T;
   matchId?: string;
-  payload?: any; // Generic payload container
-  courtId?: number; // For COURT_UPDATE
-  status?: "busy" | "free"; // For COURT_UPDATE
-  activeMatchId?: number | null; // For COURT_UPDATE
-  startTime?: string; // For COURT_UPDATE
+  payload?: any; // Contenedor genérico de carga útil
+  courtId?: number; // Para COURT_UPDATE
+  status?: "busy" | "free"; // Para COURT_UPDATE
+  activeMatchId?: number | null; // Para COURT_UPDATE
+  startTime?: string; // Para COURT_UPDATE
   timestamp?: string;
-  snapshot?: BackendMatchSnapshot; // Raw backend match row, mapped to LiveMatchData in store
-  // MATCH_FINISHED specific fields
+  snapshot?: BackendMatchSnapshot; // Fila bruta de partido del backend, mapeada a LiveMatchData en el store
+  // Campos específicos de MATCH_FINISHED
   winnerSide?: string;
   finalScore?: {
     sets: Array<{ pairAGames: number; pairBGames: number }>;
@@ -190,13 +190,13 @@ interface WebSocketMessage<T = any> {
   };
 }
 
-/** Legacy/alternative server message shape if needed */
+/** Forma de mensaje de servidor alternativa/heredada si es necesaria */
 interface ServerMessage {
   type: string;
   payload: any;
 }
 // =============================================================================
-// █ HISTORY DOMAIN
+// █ DOMINIO DE HISTORIAL (HISTORY)
 // =============================================================================
 
 export interface HistoryMatchSummary {

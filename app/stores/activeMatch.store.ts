@@ -1,8 +1,8 @@
 /**
  * █ [STORE] :: ACTIVE_MATCH_STORE
  * =====================================================================
- * DESC:   Manages the state of the currently viewed live match.
- *         Handles WebSocket connection, subscription, and data updates.
+ * DESC:   Gestiona el estado del partido en vivo que se está visualizando.
+ *         Maneja la conexión WebSocket, suscripciones y actualizaciones de datos.
  * STATUS: WIP
  * =====================================================================
  */
@@ -17,46 +17,46 @@ import type {
 
 export const useActiveMatchStore = defineStore("activeMatch", () => {
   // ===========================================================================
-  // █ STATE
+  // █ ESTADO (STATE)
   // ===========================================================================
   const match = ref<LiveMatchData | null>(null);
   const commentary = ref<CommentaryEntry[]>([]);
   const isConnected = ref(false);
   const loading = ref(false);
 
-  // WebSocket Composable
+  // Composable de WebSocket
   const {
     connect,
     subscribe,
     unsubscribe,
     onMessage,
     isConnected: wsConnected,
-  } = useWebSocket(); // We need to fix useWebSocket export to return isConnected
+  } = useWebSocket(); // Necesitamos arreglar el export de useWebSocket para que devuelva isConnected
 
   // ===========================================================================
-  // █ ACTIONS
+  // █ ACCIONES (ACTIONS)
   // ===========================================================================
 
   /**
-   * Initialize a live match view
+   * Inicializar la vista de un partido en vivo
    */
   const initLiveMatch = (matchId: number | string) => {
     loading.value = true;
 
-    // 1. Connect WS if not connected
-    // TODO: Get URL from env
+    // 1. Conectar WS si no está conectado
+    // TODO: Obtener URL de env
     if (import.meta.client) {
       connect("ws://localhost:8000/ws");
     }
 
-    // 2. Subscribe to match topic
+    // 2. Suscribirse al tópico del partido
     setTimeout(() => {
       subscribe(matchId);
-    }, 500); // Small delay to ensure connection is open (naive, better to watch isConnected)
+    }, 500); // Pequeño retraso para asegurar que la conexión esté abierta (ingenuo, mejor observar isConnected)
   };
 
   /**
-   * cleanup
+   * Limpieza (cleanup)
    */
   const leaveMatch = (matchId: number | string) => {
     unsubscribe(matchId);
@@ -65,12 +65,12 @@ export const useActiveMatchStore = defineStore("activeMatch", () => {
   };
 
   /**
-   * Handle incoming WebSocket messages
+   * Manejar mensajes entrantes de WebSocket
    */
   const handleMessage = (msg: WebSocketMessage) => {
     switch (msg.type) {
       case "SUBSCRIBED":
-        // Initial snapshot
+        // Snapshot inicial
         if (msg.snapshot) {
           updateMatchState(msg.snapshot);
         }
@@ -86,7 +86,7 @@ export const useActiveMatchStore = defineStore("activeMatch", () => {
       case "MATCH_FINISHED":
         if (match.value && msg.matchId === String(match.value.id)) {
           match.value.isLive = false;
-          // Optionally update final score if provided
+          // Opcionalmente actualizar el marcador final si se proporciona
           if (msg.finalScore) {
             match.value.setsWonA = msg.finalScore.pairASets;
             match.value.setsWonB = msg.finalScore.pairBSets;
@@ -106,26 +106,24 @@ export const useActiveMatchStore = defineStore("activeMatch", () => {
     }
   };
 
-  // Register listener ONCE
-  // Since this is a setup store, this runs when the store is instantiated
+  // Registrar listener UNA VEZ
+  // Como este es un setup store, esto se ejecuta cuando se instancian el store
   onMessage(handleMessage);
 
   /**
-   * Update local match state from backend snapshot
+   * Actualizar el estado local del partido desde el snapshot del backend
    */
   const updateMatchState = (snapshot: BackendMatchSnapshot) => {
     /**
-     * Maps the flat backend DB-row snapshot into the frontend LiveMatchData shape.
-     * Backend fields → Frontend fields:
-     *   pairAScore/pairBScore  → pointsA/pointsB  (game points: "0","15","30","40")
-     *   pairAGames/pairBGames  → setScoreA/setScoreB  (games in current set)
+     * Mapea el snapshot plano de la fila de DB del backend a la forma LiveMatchData del frontend.
+     * Campos Backend → Campos Frontend:
+     *   pairAScore/pairBScore  → pointsA/pointsB  (puntos del juego: "0","15","30","40")
+     *   pairAGames/pairBGames  → setScoreA/setScoreB  (juegos en el set actual)
      *   pairASets/pairBSets    → setsWonA/setsWonB
      *   currentSetIdx          → currentSet
      *   pairAName/pairBName    → teamA/teamB name
-     *   startTime              → elapsedMinutes (computed diff)
-     *   sets                   → sets (history)
-     *   sets                   → sets (history)
-     *   sets                   → sets (history)
+     *   startTime              → elapsedMinutes (diferencia calculada)
+     *   sets                   → sets (historial)
      */
     const elapsed = snapshot.startTime
       ? Math.floor(
@@ -137,10 +135,10 @@ export const useActiveMatchStore = defineStore("activeMatch", () => {
       id: snapshot.id,
       courtName: snapshot.courtId ? `Pista ${snapshot.courtId}` : "Pista",
       type: snapshot.matchType || "friendly",
-      // Timing
+      // Tiempos
       startTime: snapshot.startTime,
       elapsedMinutes: elapsed,
-      // Score
+      // Marcador
       currentSet: snapshot.currentSetIdx ?? 1,
       setScoreA: snapshot.pairAGames ?? 0,
       setScoreB: snapshot.pairBGames ?? 0,
@@ -148,32 +146,32 @@ export const useActiveMatchStore = defineStore("activeMatch", () => {
       pointsB: snapshot.pairBScore ?? "0",
       setsWonA: snapshot.pairASets ?? 0,
       setsWonB: snapshot.pairBSets ?? 0,
-      // Teams
+      // Equipos
       teamA: {
-        name: snapshot.pairAName || "Team A",
+        name: snapshot.pairAName || "Equipo A",
         players: [
-          snapshot.pairAPlayer1Name || "Player 1",
-          snapshot.pairAPlayer2Name || "Player 2",
+          snapshot.pairAPlayer1Name || "Jugador 1",
+          snapshot.pairAPlayer2Name || "Jugador 2",
         ],
       },
       teamB: {
-        name: snapshot.pairBName || "Team B",
+        name: snapshot.pairBName || "Equipo B",
         players: [
-          snapshot.pairBPlayer1Name || "Player 3",
-          snapshot.pairBPlayer2Name || "Player 4",
+          snapshot.pairBPlayer1Name || "Jugador 3",
+          snapshot.pairBPlayer2Name || "Jugador 4",
         ],
       },
-      // State
+      // Estado
       isLive: snapshot.status === "live",
       servingPlayerName: snapshot.servingPlayerName,
-      // History
+      // Historial
       sets: snapshot.sets || [],
-      // Stats
+      // Estadísticas
       stats: (snapshot.stats || []).map((s: any) => {
         const pId = s.playerId ?? s.player_id;
         let pName = s.playerName ?? s.player_name;
 
-        // Fallback: If name not in stats, try match player names
+        // Fallback: Si el nombre no está en las stats, intentar con los nombres de los jugadores del partido
         if (!pName) {
           if (pId === snapshot.pairAPlayer1Id)
             pName = snapshot.pairAPlayer1Name;
@@ -187,7 +185,7 @@ export const useActiveMatchStore = defineStore("activeMatch", () => {
 
         return {
           playerId: pId,
-          playerName: pName ?? "Unknown",
+          playerName: pName ?? "Desconocido",
           pointsWon: s.pointsWon ?? s.points_won ?? 0,
           winners: s.winners ?? 0,
           unforcedErrors: s.unforcedErrors ?? s.unforced_errors ?? 0,
@@ -205,7 +203,7 @@ export const useActiveMatchStore = defineStore("activeMatch", () => {
     });
   };
 
-  // Sync WS connection state
+  // Sincronizar estado de conexión WS
   watch(wsConnected, (val) => {
     isConnected.value = val;
   });

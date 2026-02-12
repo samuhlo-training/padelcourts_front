@@ -1,10 +1,10 @@
 <script setup lang="ts">
 /**
- * █ [UI_ATOM] :: TEAM_INFO
+ * █ [UI_ATOMO] :: TEAM_INFO
  * =====================================================================
- * DESC:   Displays team label ("TEAM A/B") and player names.
- *         Aligns left for side A, right for side B.
- * STATUS: STABLE
+ * DESC:   Muestra la etiqueta del equipo ("TEAM A/B") y los nombres de los jugadores.
+ *         Alinea a la izquierda para el lado A, a la derecha para el lado B.
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 import type { TeamData } from '~/types'
@@ -23,12 +23,12 @@ defineProps<{
     class="flex flex-col gap-0.5"
     :class="side === 'B' ? 'items-end text-right' : 'items-start text-left'"
   >
-    <!-- TEAM LABEL -->
+    <!-- ETIQUETA DE EQUIPO -->
     <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
       {{ team.name || `Team ${side}` }}
     </span>
 
-    <!-- PLAYER NAMES -->
+    <!-- NOMBRES DE JUGADORES -->
     <p
       v-for="player in team.players"
       :key="player"

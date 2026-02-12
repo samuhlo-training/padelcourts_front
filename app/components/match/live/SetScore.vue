@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /**
- * █ [UI_ATOM] :: SET_SCORE
+ * █ [UI_ATOMO] :: SET_SCORE
  * =====================================================================
- * DESC:   Displays "SET X" label with current set score "A - B".
- * STATUS: STABLE
+ * DESC:   Muestra la etiqueta "SET X" con la puntuación actual del set "A - B".
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 
@@ -19,12 +19,12 @@ defineProps<{
 
 <template>
   <div class="flex flex-col items-center gap-1">
-    <!-- SET LABEL -->
+    <!-- ETIQUETA DEL SET -->
     <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">
       Set {{ currentSet }}
     </span>
 
-    <!-- SET SCORE -->
+    <!-- PUNTUACIÓN DEL SET -->
     <div class="flex items-center gap-3 text-3xl font-black text-brand-dark tabular-nums">
       <span>{{ scoreA }}</span>
       <span class="text-gray-300">-</span>

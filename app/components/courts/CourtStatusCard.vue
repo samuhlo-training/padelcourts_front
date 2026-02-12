@@ -1,10 +1,10 @@
 <script setup lang="ts">
 /**
- * █ [UI_MOLECULE] :: COURT_STATUS_CARD
+ * █ [UI_MOLECULA] :: COURT_STATUS_CARD
  * =====================================================================
- * DESC:   Row card for a court. Two visual modes: occupied (with timer
- *         and live icon) or free (with "Ver ultimo partido" link).
- *         Occupied courts link to /courts/:id/live.
+ * DESC:   Tarjeta de fila para una pista. Dos modos visuales: ocupada
+ *         (con cronómetro e icono en vivo) o libre (con enlace "Ver último partido").
+ *         Las pistas ocupadas enlazan a /courts/:id/live.
  * STATUS: STABLE
  * =====================================================================
  */
@@ -19,7 +19,7 @@ const props = defineProps<{
   court: Court
 }>()
 // =============================================================================
-// █ LOGIC: TIMER
+// █ LÓGICA: CRONÓMETRO (TIMER)
 // =============================================================================
 const now = useNow({ interval: 1000 })
 
@@ -27,7 +27,7 @@ const formattedElapsedTime = computed(() => {
   const match = props.court.currentMatch
   if (!match) return '00:00:00'
   
-  // If we have a start time, calculate live duration
+  // Si tenemos una hora de inicio, calcular la duración en vivo
   if (match.startTime) {
     const start = new Date(match.startTime).getTime()
     const current = now.value.getTime()
@@ -40,17 +40,17 @@ const formattedElapsedTime = computed(() => {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
   }
   
-  // Fallback to static elapsed time if available
+  // Caída a tiempo transcurrido estático si está disponible
   return match.elapsedTime || '00:00:00'
 })
 </script>
 
 <template>
   <!-- ======================================================================= -->
-  <!-- █ SECTION: COURT CARD -->
+  <!-- █ SECCIÓN: TARJETA DE PISTA -->
   <!-- ======================================================================= -->
 
-  <!-- OCCUPIED → NuxtLink to live view -->
+  <!-- OCUPADA → NuxtLink a la vista en vivo -->
   <NuxtLink
     v-if="court.status === 'occupied'"
     :to="`/courts/${court.id}/live`"
@@ -76,7 +76,7 @@ const formattedElapsedTime = computed(() => {
     </template>
   </NuxtLink>
 
-  <!-- FREE → Static div -->
+  <!-- LIBRE → div estático -->
   <div
     v-else
     class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 bg-white border border-gray-100 shadow-sm hover:shadow-md"
@@ -88,7 +88,7 @@ const formattedElapsedTime = computed(() => {
     <span class="flex-1" />
     <NuxtLink :to="`/history/match/${court.lastMatchId}`">
       <button class="flex flex-row items-center gap-1.5 text-sm text-gray-600 hover:text-brand-lime hover:font-bold transition-all duration-150">
-        Ver ultimo partido
+        Ver último partido
         <PhArrowRight :size="12" weight="bold" />
       </button>
     </NuxtLink>

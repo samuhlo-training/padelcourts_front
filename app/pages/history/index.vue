@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /**
- * █ [PAGE] :: HISTORY
+ * █ [PÁGINA] :: HISTORIAL
  * =====================================================================
- * DESC:   List of past matches with details.
+ * DESC:   Lista de partidos pasados con detalles.
  * STATUS: MOCK
  * =====================================================================
  */
@@ -17,20 +17,20 @@ useHead({
 })
 
 // =============================================================================
-// █ DATA: FETCHING
+// █ DATOS: OBTENCIÓN (FETCHING)
 // =============================================================================
 const { historyMatches: rawMatches, loading: pending, error, loadHistory } = useHistoryMatchData()
 
-// Load data on mount
+// Cargar datos al montar el componente
 onMounted(() => {
   loadHistory()
-  // If you want SSR fetch, useAsyncData pattern inside store or here. 
-  // For now ensuring client-side fetch or hybrid.
-  // Actually, standard useFetch in store works, but let's call it.
+  // Si se desea fetch SSR, usar el patrón useAsyncData dentro de la tienda o aquí.
+  // Por ahora asegurando fetch del lado del cliente o híbrido.
+  // En realidad, useFetch estándar en la tienda funciona, pero vamos a llamarlo.
 })
 
-// Map to UI format if needed, typically store data is already good or we map here
-// The UI expects a specific format. Let's map it.
+// Mapear al formato de la interfaz si es necesario.
+// La UI espera un formato específico. Vamos a mapearlo.
 const historyMatches = computed(() => {
   if (!rawMatches.value || !Array.isArray(rawMatches.value)) return []
   
@@ -43,7 +43,7 @@ const historyMatches = computed(() => {
     court: m.court,
     teamA: {
       name: m.team_a.name,
-      players: [], // Summary endpoint might not have players
+      players: [], // El endpoint de resumen podría no tener jugadores
       sets: m.team_a.sets_won,
     },
     teamB: {
@@ -60,35 +60,35 @@ const historyMatches = computed(() => {
 
 <template>
   <div class="flex flex-col h-full">
-    <!-- HEADER -->
+    <!-- CABECERA -->
     <div class="mb-8">
       <h1 class="text-3xl font-bold text-brand-dark tracking-tight ml-8">
         HISTORIAL
       </h1>
     </div>
 
-    <!-- CONTENT: LIST -->
-    <!-- We use a scrollable container for the list -->
+    <!-- CONTENIDO: LISTA -->
+    <!-- Usamos un contenedor con scroll para la lista -->
     <div class="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-hide pb-20">
       
-      <!-- LOADING STATE -->
+      <!-- ESTADO DE CARGA -->
       <div v-if="pending" class="flex flex-col items-center justify-center py-20 opacity-50">
         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-lime"></div>
         <span class="text-sm mt-2 font-medium">Cargando historial...</span>
       </div>
 
-      <!-- ERROR STATE -->
+      <!-- ESTADO DE ERROR -->
       <div v-else-if="error" class="text-center py-10 text-red-400">
         <p>Error al cargar el historial.</p>
         <p class="text-xs opacity-60">{{ error }}</p>
       </div>
 
-      <!-- EMPTY STATE -->
+      <!-- ESTADO VACÍO -->
       <div v-else-if="historyMatches.length === 0" class="text-center py-20 opacity-40">
         <p class="font-bold">No hay partidos finalizados</p>
       </div>
 
-      <!-- LIST -->
+      <!-- LISTA -->
       <MatchHistoryCard 
         v-else
         v-for="match in historyMatches" 

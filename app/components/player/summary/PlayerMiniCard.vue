@@ -1,10 +1,10 @@
 <script setup lang="ts">
 /**
- * █ [UI_MOLECULE] :: PLAYER_MINI_CARD
+ * █ [UI_MOLECULA] :: PLAYER_MINI_CARD
  * =====================================================================
- * DESC:   Compact MVP player card with lime background. Composes
- *         MVPBadge, player name and MiniDetails.
- * STATUS: STABLE
+ * DESC:   Tarjeta de jugador MVP compacta con fondo lima. Compone
+ *         MVPBadge, nombre del jugador y MiniDetails.
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 import type { PlayerMVPData } from '~/types'
@@ -17,7 +17,7 @@ import MiniDetails from './MiniDetails.vue'
 const props = defineProps<{
   player: PlayerMVPData
   variant?: 'mvp' | 'team-a' | 'team-b'
-  to?: string | object // Optional navigation target
+  to?: string | object // Objetivo de navegación opcional
 }>()
 
 const variantClasses = computed(() => {
@@ -33,27 +33,27 @@ const variantClasses = computed(() => {
 </script>
 
 <template>
-  <!-- LINK VARIANT -->
+  <!-- VARIANTE DE ENLACE -->
   <NuxtLink
     v-if="to"
     :to="to"
     class="rounded-2xl p-6 shadow-sm flex flex-col gap-3 h-full transition-all duration-200 hover:shadow-md hover:scale-[1.02] cursor-pointer"
     :class="variantClasses"
   >
-    <!-- MVP BADGE (Only for MVP variant) -->
+    <!-- INSIGNIA MVP (Solo para variante MVP) -->
     <MVPBadge v-if="variant === 'mvp'" />
     
-    <!-- TEAM BADGE (For team variants) -->
+    <!-- INSIGNIA DE EQUIPO (Para variantes de equipo) -->
     <div v-else-if="variant" class="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">
-      {{ variant === 'team-a' ? 'Team A' : 'Team B' }}
+      {{ variant === 'team-a' ? 'Equipo A' : 'Equipo B' }}
     </div>
 
-    <!-- PLAYER NAME -->
+    <!-- NOMBRE DEL JUGADOR -->
     <h3 class="text-2xl font-black text-brand-dark uppercase tracking-tight leading-tight">
       {{ player.name }}
     </h3>
 
-    <!-- STATS -->
+    <!-- ESTADÍSTICAS -->
     <MiniDetails
       :stats="[
         { label: 'Puntos', value: player.points },
@@ -62,26 +62,26 @@ const variantClasses = computed(() => {
     />
   </NuxtLink>
 
-  <!-- DIV VARIANT -->
+  <!-- VARIANTE DIV -->
   <div
     v-else
     class="rounded-2xl p-6 shadow-sm flex flex-col gap-3 h-full transition-all duration-200"
     :class="variantClasses"
   >
-    <!-- MVP BADGE (Only for MVP variant) -->
+    <!-- INSIGNIA MVP (Solo para variante MVP) -->
     <MVPBadge v-if="variant === 'mvp'" />
     
-    <!-- TEAM BADGE (For team variants) -->
+    <!-- INSIGNIA DE EQUIPO (Para variantes de equipo) -->
     <div v-else-if="variant" class="text-xs font-bold uppercase tracking-wider opacity-60 mb-1">
-      {{ variant === 'team-a' ? 'Team A' : 'Team B' }}
+      {{ variant === 'team-a' ? 'Equipo A' : 'Equipo B' }}
     </div>
 
-    <!-- PLAYER NAME -->
+    <!-- NOMBRE DEL JUGADOR -->
     <h3 class="text-2xl font-black text-brand-dark uppercase tracking-tight leading-tight">
       {{ player.name }}
     </h3>
 
-    <!-- STATS -->
+    <!-- ESTADÍSTICAS -->
     <MiniDetails
       :stats="[
         { label: 'Puntos', value: player.points },

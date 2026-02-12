@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /**
- * █ [UI_ATOM] :: MINI_DETAILS
+ * █ [UI_ATOMO] :: MINI_DETAILS
  * =====================================================================
- * DESC:   Stat pills showing key metrics like "Puntos 08", "Fallos 03".
- * STATUS: STABLE
+ * DESC:   Pastillas de estadísticas que muestran métricas clave como "Puntos 08", "Fallos 03".
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 /**
- * █ [UI_MOLECULE] :: MATCH_LIVE_CARD
+ * █ [UI_MOLECULA] :: MATCH_LIVE_CARD
  * =====================================================================
- * DESC:   Main live match card. Composes SetScore, BigScore, MatchScore
- *         and two TeamInfo blocks into a centered vertical layout.
- * STATUS: STABLE
+ * DESC:   Tarjeta principal de partido en vivo. Compone SetScore, BigScore, MatchScore
+ *         y dos bloques TeamInfo en un diseño vertical centrado.
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 import type { LiveMatchData } from '~/types'
@@ -22,11 +22,11 @@ const props = defineProps<{
 }>()
 
 // =============================================================================
-// █ LOGIC: TIMER
+// █ LÓGICA: CRONÓMETRO (TIMER)
 // =============================================================================
 const { now, pause, resume } = useNow({ controls: true, interval: 1000 })
 
-// Watch match status to pause/resume timer
+// Observar el estado del partido para pausar/reanudar el cronómetro
 watch(() => props.match.isLive, (isLive) => {
   if (isLive) resume()
   else pause()
@@ -50,7 +50,7 @@ const formattedElapsedTime = computed(() => {
 <template>
   <div class="flex flex-col h-full">
     <!-- ------------------------------------------------------------------- -->
-    <!-- █ HEADER: Match type + elapsed time -->
+    <!-- █ CABECERA: Tipo de partido + tiempo transcurrido -->
     <!-- ------------------------------------------------------------------- -->
     <div class="flex items-center justify-between mb-8">
       <h2 class="text-sm font-black text-brand-dark uppercase tracking-wider">
@@ -62,23 +62,23 @@ const formattedElapsedTime = computed(() => {
     </div>
 
     <!-- ------------------------------------------------------------------- -->
-    <!-- █ BODY: Scores stacked vertically, centered -->
+    <!-- █ CUERPO: Puntuaciones apiladas verticalmente, centradas -->
     <!-- ------------------------------------------------------------------- -->
     <div class="flex flex-col items-center gap-4 flex-1">
-      <!-- SET SCORE -->
+      <!-- PUNTUACIÓN DEL SET -->
       <SetScore
         :current-set="match.currentSet"
         :score-a="match.setScoreA"
         :score-b="match.setScoreB"
       />
 
-      <!-- BIG SCORE (game points) -->
+      <!-- GRAN PUNTUACIÓN (puntos del juego) -->
       <BigScore
         :points-a="match.pointsA"
         :points-b="match.pointsB"
       />
 
-      <!-- MATCH SCORE (sets won pill) -->
+      <!-- PUNTUACIÓN DEL PARTIDO (pastilla de sets ganados) -->
       <MatchScore
         :sets-a="match.setsWonA"
         :sets-b="match.setsWonB"
@@ -86,7 +86,7 @@ const formattedElapsedTime = computed(() => {
     </div>
 
     <!-- ------------------------------------------------------------------- -->
-    <!-- █ FOOTER: Team info, side by side -->
+    <!-- █ PIE DE PÁGINA: Información del equipo, lado a lado -->
     <!-- ------------------------------------------------------------------- -->
     <div class="flex items-start justify-between mt-8 px-4">
       <TeamInfo :team="match.teamA" side="A" />

@@ -2,13 +2,13 @@
 /**
  * █ [UI_LAYOUT] :: APP_SIDEBAR
  * =====================================================================
- * DESC:   Fixed sidebar navigation. Contains 4 nav items + MagicButton.
- * STATUS: STABLE
+ * DESC:   Navegación lateral fija. Contiene 4 elementos de navegación + MagicButton.
+ * STATUS: ESTABLE (STABLE)
  * =====================================================================
  */
 
 // =============================================================================
-// █ CORE: NAVIGATION ITEMS
+// █ CORE: ELEMENTOS DE NAVEGACIÓN
 // =============================================================================
 const navItems = [
   { label: 'PISTAS', to: '/courts', icon: 'grid' },
@@ -19,12 +19,12 @@ const navItems = [
 
 <template>
   <!-- ======================================================================= -->
-  <!-- █ SECTION: SIDEBAR -->
+  <!-- █ SECCIÓN: BARRA LATERAL (SIDEBAR) -->
   <!-- ======================================================================= -->
   <aside class="w-52 bg-white border-r border-gray-100 flex flex-col h-full">
 
     <!-- --------------------------------------------------------------------- -->
-    <!-- █ NAV LINKS -->
+    <!-- █ ENLACES DE NAVEGACIÓN -->
     <!-- --------------------------------------------------------------------- -->
     <nav class="flex-1 p-4 space-y-1">
       <CommonSidebarButton
@@ -37,7 +37,7 @@ const navItems = [
     </nav>
 
     <!-- --------------------------------------------------------------------- -->
-    <!-- █ BOTTOM ACTION -->
+    <!-- █ ACCIÓN INFERIOR -->
     <!-- --------------------------------------------------------------------- -->
     <div class="p-4">
       <CommonMagicButton />

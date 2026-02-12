@@ -12,7 +12,7 @@ Crea un partido nuevo con 4 bots y empieza a generar puntos automáticamente cad
 
 **Endpoint:** `POST /simulator/start`
 
-**Body:**
+**Cuerpo (Body):**
 ```json
 {
   "courtId": 1
@@ -32,11 +32,11 @@ Crea un partido nuevo con 4 bots y empieza a generar puntos automáticamente cad
 2. Crea un partido en estado `live` asignado a la pista indicada.
 3. Empieza un bucle infinito que:
    - Genera un punto aleatorio con lógica detallada:
-     - **Strokes variados**: Smash, Bandeja, Víbora, Voleas, Globos, etc.
-     - **Tipos de punto**: Winners, Errores forzados/no forzados.
+     - **Golpes (Strokes) variados**: Smash, Bandeja, Víbora, Voleas, Globos, etc.
+     - **Tipos de punto**: Ganadores (Winners), Errores forzados/no forzados.
      - **Velocidad**: Simula velocidad para remates potentes.
    - **Genera Comentarios (CommentaryBot)**: "¡MISIL DE Bot Alpha! 🚀 Smash a 145km/h".
-   - Actualiza la base de datos (Score, historial, stats).
+   - Actualiza la base de datos (Puntuación, historial, estadísticas).
    - **Dispara eventos WebSocket**:
      - `MATCH_UPDATE`: Marcador actualizado.
      - `COMMENTARY`: Nuevo comentario generado.
@@ -50,7 +50,7 @@ Detiene el bucle de generación de puntos para un partido específico.
 
 **Endpoint:** `POST /simulator/stop`
 
-**Body:**
+**Cuerpo (Body):**
 ```json
 {
   "matchId": 123
@@ -65,13 +65,13 @@ Detiene el bucle de generación de puntos para un partido específico.
 }
 ```
 
-## 🛠️ Configuración (Dev/Internal)
+## 🛠️ Configuración (Interna/Desarrollo)
 
 El comportamiento de la simulación se puede ajustar en `services/simulator.ts`:
 
-- `INTERVAL_MS`: Tiempo entre puntos (Default: 3000ms).
+- `INTERVAL_MS`: Tiempo entre puntos (Predeterminado: 3000ms).
 - `PROBABILITY_ERROR`: Probabilidad de error no forzado.
-- `PROBABILITY_WINNER`: Probabilidad de winner.
+- `PROBABILITY_WINNER`: Probabilidad de ganador (winner).
 
 ## ⚠️ Notas Importantes
 
